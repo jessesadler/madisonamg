@@ -32,7 +32,7 @@ create_report <- function(df, peaks,
                           baseline = NULL) {
   stimuli <- df %>%
     find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(sample)
+    dplyr::pull(.data$sample)
 
   if (length(stimuli) != length(peaks)) {
     stop(call. = FALSE,
@@ -43,7 +43,7 @@ create_report <- function(df, peaks,
   # Collect pieces for report
   # Delay in milliseconds
   delay <- (purrr::map_dbl(peaks, min) - stimuli) * 1000 / freq
-  values <- find_values(peaks, df$response)
+  values <- find_values(df, peaks)
   peak_amp <- purrr::map_dbl(values, max)
 
   # 100 - pct to make value the decreasing percentage
