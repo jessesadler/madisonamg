@@ -65,6 +65,7 @@ filter_full_stimuli <- function(df, buffer = 100,
 #' Used to plot full response.
 #'
 #' @inheritParams filter_full_stimuli
+#' @inheritParams peaks_checks
 #'
 #' @seealso `filter_full_stimuli()`
 #'

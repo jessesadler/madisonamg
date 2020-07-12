@@ -17,9 +17,9 @@
 
 find_stimuli <- function(df, stimulus_diff = 9000) {
   df %>%
-    dplyr::mutate(diff = stimulus - dplyr::lag(stimulus)) %>%
+    dplyr::mutate(diff = .data$stimulus - dplyr::lag(.data$stimulus)) %>%
     dplyr::filter(diff > stimulus_diff) %>%
-    dplyr::filter(sample - dplyr::lag(sample, default = 0) != 1)
+    dplyr::filter(.data$sample - dplyr::lag(.data$sample, default = 0) != 1)
 }
 
 # Return a tibble of the onset of the stimulus
@@ -48,10 +48,10 @@ stimulus_frequency <- function(df, stimulus_diff = 9000, sample = TRUE) {
   if (sample == TRUE) {
     df %>%
       find_stimuli(stimulus_diff = stimulus_diff) %>%
-      dplyr::mutate(diff = sample - dplyr::lag(sample))
+      dplyr::mutate(diff = .data$sample - dplyr::lag(.data$sample))
   } else {
     df %>%
       find_stimuli(stimulus_diff = stimulus_diff) %>%
-      dplyr::mutate(diff = secs - dplyr::lag(secs))
+      dplyr::mutate(diff = .data$secs - dplyr::lag(.data$secs))
   }
 }

@@ -13,15 +13,15 @@ find_values <- function(df, samples) {
   if (is.list(samples)) {
     smpl_vctr <- purrr::flatten_int(samples)
 
-    out_df <- dplyr::filter(df, sample %in% smpl_vctr)
+    out_df <- dplyr::filter(df, .data$sample %in% smpl_vctr)
 
     split(out_df$response, cumsum(c(TRUE, diff(out_df$sample) != 1L))) %>%
       purrr::set_names(NULL)
   } else if (is.numeric(samples)) {
     smpl_vctr <- samples
 
-    dplyr::filter(df, sample %in% smpl_vctr) %>%
-      dplyr::pull(response)
+    dplyr::filter(df, .data$sample %in% smpl_vctr) %>%
+      dplyr::pull(.data$response)
   } else {
     stop(call. = FALSE,
          "<samples> must be a numeric vector or list of numeric vectors.")

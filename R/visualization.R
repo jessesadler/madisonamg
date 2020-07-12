@@ -13,13 +13,15 @@ viz_full_response <- function(df, buffer = 100,
   p <- df %>%
     dplyr::filter(sample >= start & sample <= end) %>%
     ggplot2::ggplot() +
-    ggplot2::geom_line(aes(x = sample, y = response)) +
+    ggplot2::geom_line(ggplot2::aes(x = .data$sample, y = .data$response)) +
     ggplot2::labs(title = glue::glue({title}),
                   x = NULL, y = NULL)
 
   if (show_stimulus) {
     p +
-      ggplot2::geom_point(data = stimuli_df, aes(x = sample, y = response), color = "red")
+      ggplot2::geom_point(data = stimuli_df,
+                          ggplot2::aes(x = .data$sample, y = .data$response),
+                          color = "red")
   } else {
     p
   }
@@ -37,7 +39,7 @@ viz_highlight_peaks <- function(df, peaks, buffer = 100,
 
   peak_nr <- purrr::map2(seq_along(peaks), peak_lengths,
                          ~ rep_len(.x, .y)) %>%
-    flatten_int()
+    purrr::flatten_int()
 
   response <- tibble::tibble(sample = samples,
                              response = vals,
@@ -49,7 +51,10 @@ viz_highlight_peaks <- function(df, peaks, buffer = 100,
 
   p +
     ggplot2::geom_line(data = response,
-                       aes(x = sample, y = response, group = group), color = "dodgerblue")
+                       ggplot2::aes(x = .data$sample,
+                                    y = .data$response,
+                                    group = .data$group),
+                       color = "dodgerblue")
 
 }
 
@@ -61,15 +66,15 @@ viz_peak <- function(df, peaks, peak,
   peak_samples <- peaks[[peak]]
 
   peak_df <- df %>%
-    dplyr::filter(sample %in% peak_samples)
+    dplyr::filter(.data$sample %in% peak_samples)
 
   start <- min(peak_samples) - buffer * freq / 1000
   end <- max(peak_samples) + buffer * freq / 1000
 
   buffer_df <- df %>%
-    dplyr::filter(sample >= start & sample <= end)
+    dplyr::filter(.data$sample >= start & sample <= end)
 
-  p <- ggplot2::ggplot(mapping = aes(x = sample, y = response)) +
+  p <- ggplot2::ggplot(mapping = ggplot2::aes(x = .data$sample, y = .data$response)) +
     ggplot2::geom_line(data = buffer_df) +
     ggplot2::geom_line(data = peak_df, color = "dodgerblue") +
     ggplot2::labs(title = glue::glue("Peak: {peak}")) +
@@ -82,7 +87,7 @@ viz_peak <- function(df, peaks, peak,
 
     p <- p +
       ggplot2::geom_ribbon(data = peak_df,
-                           aes(ymin = baseline, ymax = response),
+                           ggplot2::aes(ymin = .data$baseline, ymax = .data$response),
                            fill = "dodgerblue", alpha = 0.8)
   }
   p
@@ -93,10 +98,10 @@ viz_peak_facet <- function(df, peaks) {
 
   purrr::map2_df(.x = peaks, .y = peak_nr,
                  ~ df %>%
-                   dplyr::filter(sample %in% .x) %>%
+                   dplyr::filter(.data$sample %in% .x) %>%
                    dplyr::mutate(peak = .y)) %>%
     ggplot2::ggplot() +
-    ggplot2::geom_line(aes(x = sample, y = response)) +
+    ggplot2::geom_line(ggplot2::aes(x = .data$sample, y = .data$response)) +
     ggplot2::facet_wrap(~ peak, scales = "free") +
     ggplot2::labs(x = NULL, y = NULL)
 }
@@ -110,15 +115,15 @@ viz_peak_delay <- function(df, peaks, peak, buffer = 10,
 
   stimuli <- df %>%
     find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(sample)
+    dplyr::pull(.data$sample)
   stimulus <- stimuli[[peak]]
 
-  peak_df <- dplyr::filter(df, sample %in% peak_samples)
+  peak_df <- dplyr::filter(df, .data$sample %in% peak_samples)
 
   start <- min(peak_samples) - buffer * freq / 1000
   end <- max(peak_samples) + buffer * freq / 1000
 
-  buffer_df <- dplyr::filter(df, sample >= start & sample <= end)
+  buffer_df <- dplyr::filter(df, .data$sample >= start & sample <= end)
 
   delay <- min(peak_samples) - stimulus
 
@@ -134,7 +139,7 @@ viz_peak_delay <- function(df, peaks, peak, buffer = 10,
             glue::glue("Peak begins more than {max_delay} samples after the stimulus."))
   }
 
-  p <- ggplot2::ggplot(mapping = aes(x = sample, y = response)) +
+  p <- ggplot2::ggplot(ggplot2::aes(x = .data$sample, y = .data$response)) +
     ggplot2::geom_line(data = buffer_df) +
     ggplot2::geom_line(data = peak_df, color = "dodgerblue") +
     ggplot2::geom_vline(xintercept = stimulus, color = "red") +
@@ -156,7 +161,7 @@ viz_peak_delay <- function(df, peaks, peak, buffer = 10,
 
     p <- p +
       ggplot2::geom_ribbon(data = peak_df,
-                           aes(ymin = baseline, ymax = response),
+                           ggplot2::aes(ymin = .data$baseline, ymax = .data$response),
                            fill = "dodgerblue", alpha = 0.8) +
       ggplot2::annotate("text",
                         x = stimulus + delay / 2,

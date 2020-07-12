@@ -9,6 +9,9 @@ create_report(df, peaks, stimulus_diff = 9000, freq = 10000, baseline = NULL)
 \arguments{
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
 
+\item{peaks}{List of numeric vectors with the samples for where the peaks
+occur.}
+
 \item{stimulus_diff}{The stimulus is found by seeing when the stimulus
 recording increases by a given amount from the previous sample. Default is
 9000, which seems to work for most recordings.}

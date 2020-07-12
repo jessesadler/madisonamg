@@ -48,5 +48,5 @@ waveMC_to_tbl <- function(wav, freq) {
                  !!c2 := right,
                  sample = seq_along(left)) %>%
     dplyr::mutate(secs = sample / freq) %>%
-    dplyr::select(sample, secs, !!c1, !!c2)
+    dplyr::select(sample, .data$secs, !!c1, !!c2)
 }

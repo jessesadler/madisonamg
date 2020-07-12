@@ -4,6 +4,7 @@
 #'
 #' @inheritParams find_stimuli
 #' @inheritParams find_peaks_stimulus
+#' @inheritParams peaks_checks
 #' @param baseline If `NULL` (the default), the baseline for calculating
 #'   area under the curve is the minimum response value for each peak.
 #'   Otherwise, baseline can be a single numeric value for a consistent
@@ -42,7 +43,7 @@ create_report <- function(df, peaks,
   # Collect pieces for report
   # Delay in milliseconds
   delay <- (purrr::map_dbl(peaks, min) - stimuli) * 1000 / freq
-  values <- sub_values(peaks, df$response)
+  values <- find_values(peaks, df$response)
   peak_amp <- purrr::map_dbl(values, max)
 
   # 100 - pct to make value the decreasing percentage
@@ -53,7 +54,7 @@ create_report <- function(df, peaks,
   if (is.null(baseline)) {
     baseline <- purrr::map_int(values, min)
   }
-  values <- map2(values, baseline, ~ .x - .y)
+  values <- purrr::map2(values, baseline, ~ .x - .y)
 
   auc <- purrr::map2_dbl(peaks, values, ~ pracma::trapz(.x, .y))
   area_decr_pct <- 100 - (auc / auc[[1]]) * 100

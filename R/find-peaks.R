@@ -35,7 +35,7 @@ find_peaks_response <- function(df,
                                 lengthen = 100) {
   lengthen <- round(lengthen / 2)
 
-  filtered_tbl <- dplyr::filter(df, response > min_amp)
+  filtered_tbl <- dplyr::filter(df, .data$response > min_amp)
 
   response_list <- split(filtered_tbl$sample,
                          cumsum(c(TRUE, diff(filtered_tbl$sample) != 1L))) %>%
@@ -46,9 +46,9 @@ find_peaks_response <- function(df,
                               ~ seq(min(.) - lengthen, max(.) + lengthen))
   vals_list <- find_values(df, expanded_list)
   above_base <- purrr::map2(vals_list, baseline, ~ .x > .y) %>%
-    flatten_lgl()
+    purrr::flatten_lgl()
 
-  response_vctr <- flatten_int(expanded_list)[above_base]
+  response_vctr <- purrr::flatten_int(expanded_list)[above_base]
 
   out <- split(response_vctr,
                cumsum(c(TRUE, diff(response_vctr) != 1L))) %>%
@@ -97,7 +97,7 @@ find_peaks_stimulus <- function(df, delay,
   # Stimuli
   stimuli <- df %>%
     find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(sample)
+    dplyr::pull(.data$sample)
 
   # start of response
   start <- stimuli + delay * freq / 1000
@@ -106,7 +106,7 @@ find_peaks_stimulus <- function(df, delay,
   if (is.na(baseline)) {
     baseline <- df %>%
       dplyr::filter(sample %in% start) %>%
-      dplyr::pull(response)
+      dplyr::pull(.data$response)
   }
 
   # Find end of response

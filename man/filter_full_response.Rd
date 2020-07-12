@@ -9,6 +9,9 @@ filter_full_response(df, peaks, buffer = 100, freq = 10000)
 \arguments{
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
 
+\item{peaks}{List of numeric vectors with the samples for where the peaks
+occur.}
+
 \item{buffer}{Default is 100. Milliseconds to add before first stimulus
 and after the last stimulus.}
 
