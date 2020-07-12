@@ -9,7 +9,8 @@ waveMC_to_tbl(wav, freq)
 \arguments{
 \item{wav}{waveMC object with left and right channels.}
 
-\item{freq}{Frequency of recording.}
+\item{freq}{Frequency of recording. This is used to create the \code{secs}
+column.}
 }
 \value{
 Returns a tibble with four columns:
@@ -24,17 +25,15 @@ All other functions in \code{amganalysis} are built around a tibble with this
 structure.
 }
 \description{
-Cast a waveMC object created by the \code{tuneR::readWave()} to a tibble.
+Cast a waveMC object created by \code{tuneR::readWave()} to a tibble.
 }
 \details{
 This function is based on a waveMC object with left and right
 channels. The channel with the highest recorded value is made into the
-stimulus variable.
+stimulus variable. An error is thrown if \code{wav} is a wave object with mono
+sound instead of a waveMC object.
 }
 \examples{
-\dontrun{
-x <- tuneR::readWave("path/to/wav/file")
-waveMC_to_tbl(x, freq = 10000)
-}
+waveMC_to_tbl(ex_waveMC, freq = 10000)
 
 }

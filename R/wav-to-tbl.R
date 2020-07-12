@@ -2,14 +2,16 @@
 
 #' Cast waveMC to tibble
 #'
-#' Cast a waveMC object created by the `tuneR::readWave()` to a tibble.
+#' Cast a waveMC object created by `tuneR::readWave()` to a tibble.
 #'
 #' @details This function is based on a waveMC object with left and right
 #' channels. The channel with the highest recorded value is made into the
-#' stimulus variable.
+#' stimulus variable. An error is thrown if `wav` is a wave object with mono
+#' sound instead of a waveMC object.
 #'
 #' @param wav waveMC object with left and right channels.
-#' @param freq Frequency of recording.
+#' @param freq Frequency of recording. This is used to create the `secs`
+#'   column.
 #'
 #' @return Returns a tibble with four columns:
 #'
@@ -22,10 +24,7 @@
 #' structure.
 #'
 #' @examples
-#' \dontrun{
-#' x <- tuneR::readWave("path/to/wav/file")
-#' waveMC_to_tbl(x, freq = 10000)
-#' }
+#' waveMC_to_tbl(ex_waveMC, freq = 10000)
 #'
 #' @export
 
@@ -43,7 +42,7 @@ waveMC_to_tbl <- function(wav, freq) {
   c1 <- dplyr::if_else(max(left) > max(right), "stimulus", "response")
   c2 <- dplyr::if_else(max(left) < max(right), "stimulus", "response")
 
-  # Return tibble
+  # Create and return tibble
   tibble::tibble(!!c1 := left,
                  !!c2 := right,
                  sample = seq_along(left)) %>%
