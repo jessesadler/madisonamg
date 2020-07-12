@@ -12,9 +12,9 @@ filter_full_stimuli(df, buffer = 100, stimulus_diff = 9000, freq = 10000)
 \item{buffer}{Default is 100. Milliseconds to add before first stimulus
 and after the last stimulus.}
 
-\item{stimulus_diff}{The stimulus is found by seeing when the stimulus
-recording increases by a given amount from the previous sample. Default is
-9000, which seems to work for most recordings.}
+\item{stimulus_diff}{The stimulus is found by seeing when the amplitude of
+the stimulus recording increases by a given amount from the previous
+sample. Default is 9000, which seems to work for most recordings.}
 
 \item{freq}{Frequency of recording. Used to convert milliseconds to samples.}
 }

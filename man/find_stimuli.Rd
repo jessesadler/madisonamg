@@ -9,15 +9,41 @@ find_stimuli(df, stimulus_diff = 9000)
 \arguments{
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
 
-\item{stimulus_diff}{The stimulus is found by seeing when the stimulus
-recording increases by a given amount from the previous sample. Default is
-9000, which seems to work for most recordings.}
+\item{stimulus_diff}{The stimulus is found by seeing when the amplitude of
+the stimulus recording increases by a given amount from the previous
+sample. Default is 9000, which seems to work for most recordings.}
 }
 \value{
 Returns a data frame in which each row shows the onset of the
-stimulus.
+stimulus. Adds \code{amp_diff}, \code{samp_diff}, and \code{sec_diff} columns.
 }
 \description{
-Find when stimuli were performed by change in recorded value of stimulus
-column from previous sample.
+Find when stimuli were performed by change in recorded amplitude of the
+stimulus column from the previous sample.
+}
+\details{
+\code{find_stimuli()} finds the onset of stimuli and creates three new columns:
+\itemize{
+\item \code{amp_diff} shows the difference in the stimulus amplitude from the
+previous sample. This is useful for checking that the function properly
+found the stimuli.
+\item \code{sample_diff} shows the time difference between stimuli as samples.
+\item \code{sec_diff} shows the time difference between stimuli as seconds. These
+variables are useful for finding or checking the frequency of the stimuli
+and for finding any oddities in the data.
+}
+}
+\examples{
+
+find_stimuli(ex_trace_tbl)
+
+# If stimulus_diff is too high or low,
+# you will get incorrect number of stimuli
+
+# Too high
+find_stimuli(ex_trace_tbl, stimulus_diff = 30000)
+
+# Too low
+find_stimuli(ex_trace_tbl, stimulus_diff = 300)
+
 }

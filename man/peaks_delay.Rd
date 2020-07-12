@@ -12,9 +12,9 @@ peaks_delay(df, peaks, stimulus_diff = 9000, min_delay = 0, max_delay = 200)
 \item{peaks}{List of numeric vectors with the samples for where the peaks
 occur.}
 
-\item{stimulus_diff}{The stimulus is found by seeing when the stimulus
-recording increases by a given amount from the previous sample. Default is
-9000, which seems to work for most recordings.}
+\item{stimulus_diff}{The stimulus is found by seeing when the amplitude of
+the stimulus recording increases by a given amount from the previous
+sample. Default is 9000, which seems to work for most recordings.}
 
 \item{min_delay}{Default 0. Minimum number of samples that the peaks should
 begin after the stimuli. A warning is given if the value is less.}
