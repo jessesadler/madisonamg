@@ -3,7 +3,7 @@
 #' Filter out all samples that are not a peak
 #'
 #' Use to make plot with just peaks
-
+#'
 #' @inheritParams find_stimuli
 #' @inheritParams peaks_delay
 #' @param length_out Default is 200. The length of each peak in samples.
@@ -46,12 +46,10 @@ filter_peaks <- function(df, peaks, length_out = 200) {
 
 filter_full_stimuli <- function(df, buffer = 100,
                                 stimulus_diff = 9000, freq = 10000) {
-  stimulus <- df %>%
-    find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(sample)
+  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
-  start <- min(stimulus) - buffer * freq / 1000
-  end <- max(stimulus) + buffer * freq / 1000
+  start <- min(stimuli) - buffer * freq / 1000
+  end <- max(stimuli) + buffer * freq / 1000
 
   dplyr::filter(df, sample >= start & sample <= end)
 }

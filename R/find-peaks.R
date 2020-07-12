@@ -95,9 +95,7 @@ find_peaks_stimulus <- function(df, delay,
                                 baseline = NA,
                                 min_length = 50) {
   # Stimuli
-  stimuli <- df %>%
-    find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(.data$sample)
+  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
   # start of response
   start <- stimuli + delay * freq / 1000

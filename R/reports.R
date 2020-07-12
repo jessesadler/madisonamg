@@ -30,9 +30,7 @@ create_report <- function(df, peaks,
                           stimulus_diff = 9000,
                           freq = 10000,
                           baseline = NULL) {
-  stimuli <- df %>%
-    find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(.data$sample)
+  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
   if (length(stimuli) != length(peaks)) {
     stop(call. = FALSE,

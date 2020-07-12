@@ -85,9 +85,7 @@ peaks_last_value <- function(df, peaks) {
 
 peaks_delay <- function(df, peaks, stimulus_diff = 9000,
                         min_delay = 0, max_delay = 200) {
-  stimuli <- df %>%
-    find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(sample)
+  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
   if (length(stimuli) != length(peaks)) {
     stop(call. = FALSE,

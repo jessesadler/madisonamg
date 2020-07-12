@@ -4,8 +4,7 @@ viz_full_response <- function(df, buffer = 100,
                               stimulus_diff = 9000, freq = 10000,
                               title = NULL,
                               show_stimulus = TRUE) {
-  stimuli_df <- df %>%
-    find_stimuli(stimulus_diff = stimulus_diff)
+  stimuli_df <- stimuli_filter(df = df, stimulus_diff = stimulus_diff)
 
   start <- min(stimuli_df$sample) - buffer * freq / 1000
   end <- max(stimuli_df$sample) + buffer * freq / 1000
@@ -18,14 +17,12 @@ viz_full_response <- function(df, buffer = 100,
                   x = NULL, y = NULL)
 
   if (show_stimulus) {
-    p +
+    p <- p +
       ggplot2::geom_point(data = stimuli_df,
                           ggplot2::aes(x = .data$sample, y = .data$response),
                           color = "red")
-  } else {
-    p
   }
-
+  p
 }
 
 viz_highlight_peaks <- function(df, peaks, buffer = 100,
@@ -113,9 +110,7 @@ viz_peak_delay <- function(df, peaks, peak, buffer = 10,
                            baseline = NULL) {
   peak_samples <- peaks[[peak]]
 
-  stimuli <- df %>%
-    find_stimuli(stimulus_diff = stimulus_diff) %>%
-    dplyr::pull(.data$sample)
+  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
   stimulus <- stimuli[[peak]]
 
   peak_df <- dplyr::filter(df, .data$sample %in% peak_samples)
@@ -194,8 +189,7 @@ interactive_trace <- function(df, peaks = NULL,
 
   if (isTRUE(show_stimuli)) {
     # vector of stimuli
-    stimuli <- find_stimuli(df, stimulus_diff = stimulus_diff) %>%
-      dplyr::pull(sample)
+    stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
     # build list of args
     stim_list <- purrr::map(seq_along(stimuli),
