@@ -36,9 +36,9 @@ create_report <- function(df, peaks,
 
   if (length(stimuli) != length(peaks)) {
     stop(call. = FALSE,
-         paste0("Number of stimuli found (", nrow(stimuli),
-                ") is different from peaks (", peaks, ")."), "\n",
-         "       Check that <peaks> is correct or alter <stimulus_diff>.")
+         glue::glue("Number of stimuli found ({nrow(stimuli)})",
+                    " is different from peaks ({length(peaks)})
+                    Check that <peaks> is correct or alter <stimulus_diff>."))
   }
   # Collect pieces for report
   # Delay in milliseconds
