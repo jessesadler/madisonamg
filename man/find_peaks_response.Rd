@@ -17,30 +17,45 @@ find_peaks_response(
 
 \item{baseline}{Baseline of signal. Function will find peaks above this
 value using greater than. Can be vector of length 1 or length of the
-number of peaks.}
+number of peaks. Default is 256.}
 
 \item{min_amp}{Minimum amplitude of response to find the peaks. This is
-used first to find the placement of the peaks.}
+used first to find the placement of the peaks. If this value is too small
+the function will return too many peaks. Default is 1500.}
 
 \item{min_length}{Minimum number of samples that should be above \code{min_amp}
-in the peaks. This helps to find the peaks and distinguish peaks
-in response to stimuli from noise.}
+in the peaks. This helps to find the peaks and distinguish peaks in
+response to stimuli from noise. Default is 50.}
 
 \item{lengthen}{Number of samples to lengthen the beginning and end of the
 peak from the \code{min_amp} value to reach the \code{baseline}. If this number is
 too large and the \code{baseline} is too small, the peak might start before
 the stimulus. If this number is too small, it might not reach the
-\code{baseline}.}
+\code{baseline}. Default is 100.}
 }
 \value{
-Returns a list of the length of the number of peaks. Each list
-contains the samples of each peak. These are not the recorded values
-but where the peaks occur on the trace.
+Returns a list of numeric vectors the length of the number of peaks.
+The numeric vectors correspond to the samples that distinguish each peak.
+These are not the recorded values but where the peaks occur on the trace.
+Use \code{find_values()} to find the response amplitudes of the returned
+samples. Make sure to check that the length of the returned list is the
+same as the number of stimuli. If this is not the case, arguments will
+need to be changed.
 }
 \description{
-Find peaks by looking for when response is above a set \code{min_amp} for an
-extended period of time (\code{min_length}). The function then finds all samples
-above the \code{baseline}.
+Find peaks by looking for when response amplitude is above a set \code{min_amp}
+for an extended period of time (\code{min_length}). The function then finds all
+samples above the \code{baseline}.
+}
+\examples{
+
+find_peaks_response(ex_trace_tbl)
+
+# Changing the parameters of the arguments
+# will change the definition of the peaks
+
+find_peaks_response(ex_trace_tbl, baseline = 400)
+
 }
 \seealso{
 See \code{\link[=find_peaks_stimulus]{find_peaks_stimulus()}} for another way to calculate the

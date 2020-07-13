@@ -1,8 +1,8 @@
 #' Find peaks by amplitude of response
 #'
-#' Find peaks by looking for when response is above a set `min_amp` for an
-#' extended period of time (`min_length`). The function then finds all samples
-#' above the `baseline`.
+#' Find peaks by looking for when response amplitude is above a set `min_amp`
+#' for an extended period of time (`min_length`). The function then finds all
+#' samples above the `baseline`.
 #'
 #' @seealso See [`find_peaks_stimulus()`] for another way to calculate the
 #' beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
@@ -10,21 +10,35 @@
 #' @inheritParams find_stimuli
 #' @param baseline Baseline of signal. Function will find peaks above this
 #'   value using greater than. Can be vector of length 1 or length of the
-#'   number of peaks.
+#'   number of peaks. Default is 256.
 #' @param min_amp Minimum amplitude of response to find the peaks. This is
-#'   used first to find the placement of the peaks.
+#'   used first to find the placement of the peaks. If this value is too small
+#'   the function will return too many peaks. Default is 1500.
 #' @param min_length Minimum number of samples that should be above `min_amp`
-#'   in the peaks. This helps to find the peaks and distinguish peaks
-#'   in response to stimuli from noise.
+#'   in the peaks. This helps to find the peaks and distinguish peaks in
+#'   response to stimuli from noise. Default is 50.
 #' @param lengthen Number of samples to lengthen the beginning and end of the
 #'   peak from the `min_amp` value to reach the `baseline`. If this number is
 #'   too large and the `baseline` is too small, the peak might start before
 #'   the stimulus. If this number is too small, it might not reach the
-#'   `baseline`.
+#'   `baseline`. Default is 100.
 #'
-#' @return Returns a list of the length of the number of peaks. Each list
-#'   contains the samples of each peak. These are not the recorded values
-#'   but where the peaks occur on the trace.
+#' @return Returns a list of numeric vectors the length of the number of peaks.
+#'   The numeric vectors correspond to the samples that distinguish each peak.
+#'   These are not the recorded values but where the peaks occur on the trace.
+#'   Use `find_values()` to find the response amplitudes of the returned
+#'   samples. Make sure to check that the length of the returned list is the
+#'   same as the number of stimuli. If this is not the case, arguments will
+#'   need to be changed.
+#'
+#' @examples
+#'
+#' find_peaks_response(ex_trace_tbl)
+#'
+#' # Changing the parameters of the arguments
+#' # will change the definition of the peaks
+#'
+#' find_peaks_response(ex_trace_tbl, baseline = 400)
 #'
 #' @export
 
@@ -33,15 +47,18 @@ find_peaks_response <- function(df,
                                 min_amp = 1500,
                                 min_length = 50,
                                 lengthen = 100) {
-  lengthen <- round(lengthen / 2)
+  # Samples to be added at beginning and end
+  lengthen <- lengthen %/% 2
 
+  # Stage 1: Find groups of samples above min_amp that are
+  #          also longer than min_length.
   filtered_tbl <- dplyr::filter(df, .data$response > min_amp)
-
   response_list <- split(filtered_tbl$sample,
                          cumsum(c(TRUE, diff(filtered_tbl$sample) != 1L))) %>%
     purrr::set_names(NULL) %>%
     purrr::keep(~ length(.x) > min_length)
 
+  # Stage 2: Lengthen vectors and then find all responses above the baseline.
   expanded_list <- purrr::map(response_list,
                               ~ seq(min(.) - lengthen, max(.) + lengthen))
   vals_list <- find_values(df, expanded_list)
@@ -50,6 +67,7 @@ find_peaks_response <- function(df,
 
   response_vctr <- purrr::flatten_int(expanded_list)[above_base]
 
+  # Turn back into a list and make one last check that min_length is met.
   out <- split(response_vctr,
                cumsum(c(TRUE, diff(response_vctr) != 1L))) %>%
     purrr::set_names(NULL) %>%
@@ -73,7 +91,7 @@ find_peaks_response <- function(df,
 #' @param delay Delay in milliseconds from the onset of the stimulus to begin the
 #'   peak.
 #' @param freq Frequency of recording. Used to convert milliseconds to samples.
-#' @param baseline Baseline of signal. Default is `NA`, which chooses the
+#' @param baseline Baseline of signal. Default is `NULL`, which chooses the
 #'   `baseline` for each peak based on the value of the response at the
 #'   given `delay` from the stimulus. Function will find peaks above this
 #'   value using greater than. Can be vector of length 1 or length of the
@@ -81,11 +99,20 @@ find_peaks_response <- function(df,
 #' @param min_length Minimum length of the peak in samples. This helps to
 #'   ensure measurement of peak does not end too early.
 #'
-#' @return Returns a list that should be the length of the number of peaks.
-#'   Each list contains the samples of each peak. These are not the recorded
-#'   values but where the peaks occur on the trace. Make sure to check that
-#'   the length of the returned list is the same as the number of stimuli. If
-#'   this is not the case, arguments will need to be changed.
+#' @return Returns a list of numeric vectors the length of the number of peaks.
+#'   The numeric vectors correspond to the samples that distinguish each peak.
+#'   These are not the recorded values but where the peaks occur on the trace.
+#'   Use `find_values()` to find the response amplitudes of the returned
+#'   samples. Make sure to check that the length of the returned list is the
+#'   same as the number of stimuli. If this is not the case, arguments will
+#'   need to be changed.
+#'
+#' @examples
+#'
+#' find_peaks_stimulus(ex_trace_tbl, delay = 6)
+#'
+#' # Provide baseline
+#' find_peaks_stimulus(ex_trace_tbl, delay = 6, baseline = 256)
 #'
 #' @export
 
@@ -94,14 +121,14 @@ find_peaks_stimulus <- function(df, delay,
                                 stimulus_diff = 9000,
                                 baseline = NA,
                                 min_length = 50) {
-  # Stimuli
+  # Get vector of samples where stimuli occur
   stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
   # start of response
   start <- stimuli + delay * freq / 1000
 
   # Bases at start
-  if (is.na(baseline)) {
+  if (is.null(baseline)) {
     baseline <- df %>%
       dplyr::filter(sample %in% start) %>%
       dplyr::pull(.data$response)
@@ -125,7 +152,8 @@ find_peaks_stimulus <- function(df, delay,
   # Find values
   filtered_df <- dplyr::filter(df, sample %in% possible_vctr)
   # List of response values
-  vals_list <- split(filtered_df$response, cumsum(c(TRUE, diff(filtered_df$sample) != 1L))) %>%
+  vals_list <- split(filtered_df$response,
+                     cumsum(c(TRUE, diff(filtered_df$sample) != 1L))) %>%
     purrr::set_names(NULL)
 
   # Which are above baseline

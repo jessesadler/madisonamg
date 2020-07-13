@@ -25,7 +25,7 @@ peak.}
 the stimulus recording increases by a given amount from the previous
 sample. Default is 9000, which seems to work for most recordings.}
 
-\item{baseline}{Baseline of signal. Default is \code{NA}, which chooses the
+\item{baseline}{Baseline of signal. Default is \code{NULL}, which chooses the
 \code{baseline} for each peak based on the value of the response at the
 given \code{delay} from the stimulus. Function will find peaks above this
 value using greater than. Can be vector of length 1 or length of the
@@ -35,11 +35,13 @@ number of peaks.}
 ensure measurement of peak does not end too early.}
 }
 \value{
-Returns a list that should be the length of the number of peaks.
-Each list contains the samples of each peak. These are not the recorded
-values but where the peaks occur on the trace. Make sure to check that
-the length of the returned list is the same as the number of stimuli. If
-this is not the case, arguments will need to be changed.
+Returns a list of numeric vectors the length of the number of peaks.
+The numeric vectors correspond to the samples that distinguish each peak.
+These are not the recorded values but where the peaks occur on the trace.
+Use \code{find_values()} to find the response amplitudes of the returned
+samples. Make sure to check that the length of the returned list is the
+same as the number of stimuli. If this is not the case, arguments will
+need to be changed.
 }
 \description{
 Find peaks by finding the stimuli with \code{find_stimuli()} and then beginning
@@ -47,6 +49,14 @@ the peak a set number of milliseconds after the onset of the stimulus. The
 \code{baseline} can either be defined by the user or decided separately for each
 peak based on the value of the response after the given delay. This latter
 method is the default.
+}
+\examples{
+
+find_peaks_stimulus(ex_trace_tbl, delay = 6)
+
+# Provide baseline
+find_peaks_stimulus(ex_trace_tbl, delay = 6, baseline = 256)
+
 }
 \seealso{
 See \code{\link[=find_peaks_response]{find_peaks_response()}} for another way to calculate the
