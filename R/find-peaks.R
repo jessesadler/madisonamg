@@ -53,9 +53,7 @@ find_peaks_response <- function(df,
   # Stage 1: Find groups of samples above min_amp that are
   #          also longer than min_length.
   filtered_tbl <- dplyr::filter(df, .data$response > min_amp)
-  response_list <- split(filtered_tbl$sample,
-                         cumsum(c(TRUE, diff(filtered_tbl$sample) != 1L))) %>%
-    purrr::set_names(NULL) %>%
+  response_list <- split_list(filtered_tbl$sample, filtered_tbl$sample) %>%
     purrr::keep(~ length(.x) > min_length)
 
   # Stage 2: Lengthen vectors and then find all responses above the baseline.
@@ -68,12 +66,8 @@ find_peaks_response <- function(df,
   response_vctr <- purrr::flatten_int(expanded_list)[above_base]
 
   # Turn back into a list and make one last check that min_length is met.
-  out <- split(response_vctr,
-               cumsum(c(TRUE, diff(response_vctr) != 1L))) %>%
-    purrr::set_names(NULL) %>%
+  split_list(response_vctr, response_vctr) %>%
     purrr::keep(~ length(.x) > min_length)
-
-  out
 }
 
 #' Find peaks by specified delay from stimuli
@@ -152,9 +146,7 @@ find_peaks_stimulus <- function(df, delay,
   # Find values
   filtered_df <- dplyr::filter(df, sample %in% possible_vctr)
   # List of response values
-  vals_list <- split(filtered_df$response,
-                     cumsum(c(TRUE, diff(filtered_df$sample) != 1L))) %>%
-    purrr::set_names(NULL)
+  vals_list <- split_list(filtered_df$response, filtered_df$sample)
 
   # Which are above baseline
   above_base <- purrr::map2(vals_list, baseline, ~ .x > .y)

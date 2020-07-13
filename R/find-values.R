@@ -30,13 +30,13 @@ find_values <- function(df, samples) {
     out_df <- dplyr::filter(df, .data$sample %in% smpl_vctr)
 
     # Split vector to create a list by finding where samples are discontinuous
-    split(out_df$response, cumsum(c(TRUE, diff(out_df$sample) != 1L))) %>%
-      purrr::set_names(NULL)
+    split_list(out_df$response, out_df$sample)
 
   } else if (is.numeric(samples)) {
     # Filter samples and get response vector
     dplyr::filter(df, .data$sample %in% samples) %>%
       dplyr::pull(.data$response)
+
   } else {
     stop(call. = FALSE,
          "<samples> must be a numeric vector or list of numeric vectors.")
