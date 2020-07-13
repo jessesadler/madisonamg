@@ -12,8 +12,23 @@ filter_peaks(df, peaks, length_out = 200)
 \item{peaks}{List of numeric vectors with the samples for where the peaks
 occur.}
 
-\item{length_out}{Default is 200. The length of each peak in samples.}
+\item{length_out}{Default is 200. The length of each peak in samples. Use
+\code{peaks_length()} to check length of peaks to find good value.}
+}
+\value{
+A tibble with rows equal to \code{length_out * length(peaks)} and six
+columns. \code{filter_peaks()} creates two new columns: a \code{sub_sample} column
+that is \code{1:length_out} for each peak and a \code{peak_nr} to identify each
+peak.
 }
 \description{
-Use to make plot with just peaks
+\code{filter_peaks()} is useful to plot only the peaks from a trace.
+}
+\examples{
+x <- find_peaks_response(ex_trace_tbl)
+
+peaks_length(x)
+
+filter_peaks(ex_trace_tbl, x, 250)
+
 }

@@ -18,11 +18,15 @@ and after the last stimulus.}
 \item{freq}{Frequency of recording. Used to convert milliseconds to samples.}
 }
 \description{
-Filter out anything before the beginning of the first peak and after
-the end of the last peak.
+Filter out anything before the first peak and after the last peak.
+This gets rid of all recordings before and after the performance of the
+experiment. This is particularly useful for plotting the full trace.
 }
-\details{
-Used to plot full response.
+\examples{
+x <- find_peaks_response(ex_trace_tbl)
+
+filter_full_response(ex_trace_tbl, x)
+
 }
 \seealso{
 \code{filter_full_stimuli()}

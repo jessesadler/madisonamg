@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter-tbl.R
 \name{filter_full_stimuli}
 \alias{filter_full_stimuli}
-\title{Filter data frame by stiumli}
+\title{Filter trace data frame by stiumli}
 \usage{
 filter_full_stimuli(df, buffer = 100, stimulus_diff = 9000, freq = 10000)
 }
@@ -20,9 +20,12 @@ sample. Default is 9000, which seems to work for most recordings.}
 }
 \description{
 Filter out anything before the first stimulus and after the last stimulus.
+This gets rid of all recordings before and after the performance of the
+experiment. This is particularly useful for plotting the full trace.
 }
-\details{
-Used to plot full response.
+\examples{
+filter_full_stimuli(ex_trace_tbl)
+
 }
 \seealso{
 \code{filter_full_response()}
