@@ -2,16 +2,19 @@
 % Please edit documentation in R/peak-checks.R
 \name{peaks_checks}
 \alias{peaks_checks}
-\alias{peaks_min_value}
-\alias{peaks_first_value}
-\alias{peaks_last_value}
+\alias{peaks_min_amp}
+\alias{peaks_max_amp}
+\alias{peaks_first_amp}
+\alias{peaks_last_amp}
 \title{Checks for peak groups}
 \usage{
-peaks_min_value(df, peaks)
+peaks_min_amp(df, peaks)
 
-peaks_first_value(df, peaks)
+peaks_max_amp(df, peaks)
 
-peaks_last_value(df, peaks)
+peaks_first_amp(df, peaks)
+
+peaks_last_amp(df, peaks)
 }
 \arguments{
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
@@ -26,11 +29,12 @@ A vector of values
 Checks to help explore the peaks identified by \code{find_peaks_response()},
 \code{find_peaks_stimuli()}, or \code{find_peaks_manual()}.
 \itemize{
-\item \code{peaks_min_value()} finds the minimum value of each peak, essentially
+\item \code{peaks_min_amp()} finds the minimum value of each peak, essentially
 the smallest value above the baseline.
-\item \code{peaks_first_value()} finds the first value of each peak. This should
+\item \code{peaks_max_amp()} finds the maximum value of each peak.
+\item \code{peaks_first_amp()} finds the first value of each peak. This should
 correspond with, or at least be close to, the minimum and first value(s).
-\item \code{peaks_last_value()} finds the last value of each peak. This should
+\item \code{peaks_last_amp()} finds the last value of each peak. This should
 correspond with, or at least be close to, the minimum and first value(s).
 }
 

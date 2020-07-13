@@ -6,11 +6,12 @@
 #' Checks to help explore the peaks identified by `find_peaks_response()`,
 #' `find_peaks_stimuli()`, or `find_peaks_manual()`.
 #'
-#' - `peaks_min_value()` finds the minimum value of each peak, essentially
+#' - `peaks_min_amp()` finds the minimum value of each peak, essentially
 #'   the smallest value above the baseline.
-#' - `peaks_first_value()` finds the first value of each peak. This should
+#' - `peaks_max_amp()` finds the maximum value of each peak.
+#' - `peaks_first_amp()` finds the first value of each peak. This should
 #'   correspond with, or at least be close to, the minimum and first value(s).
-#' - `peaks_last_value()` finds the last value of each peak. This should
+#' - `peaks_last_amp()` finds the last value of each peak. This should
 #'   correspond with, or at least be close to, the minimum and first value(s).
 #'
 #' The values may differ slightly because the values from the recordings are
@@ -27,7 +28,7 @@ NULL
 
 #' @rdname peaks_checks
 #' @export
-peaks_min_value <- function(df, peaks) {
+peaks_min_amp <- function(df, peaks) {
 
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), min)
@@ -41,7 +42,21 @@ peaks_min_value <- function(df, peaks) {
 
 #' @rdname peaks_checks
 #' @export
-peaks_first_value <- function(df, peaks) {
+peaks_max_amp <- function(df, peaks) {
+
+  if (is.list(peaks)) {
+    purrr::map_int(find_values(df, peaks), max)
+  } else if (is.numeric(peaks)) {
+    max(find_values(df, peaks))
+  } else {
+    stop(call. = FALSE,
+         "<peaks> must by a numeric vector or list of numeric vectors")
+  }
+}
+
+#' @rdname peaks_checks
+#' @export
+peaks_first_amp <- function(df, peaks) {
 
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), dplyr::first)
@@ -55,7 +70,7 @@ peaks_first_value <- function(df, peaks) {
 
 #' @rdname peaks_checks
 #' @export
-peaks_last_value <- function(df, peaks) {
+peaks_last_amp <- function(df, peaks) {
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), dplyr::last)
   } else if (is.numeric(peaks)) {
