@@ -2,7 +2,7 @@
 % Please edit documentation in R/reports.R
 \name{create_report}
 \alias{create_report}
-\title{Create AMG reports}
+\title{Create AMG report}
 \usage{
 create_report(df, peaks, stimulus_diff = 9000, freq = 10000, baseline = NULL)
 }
@@ -40,5 +40,13 @@ in milliseconds.
 }
 }
 \description{
-Create AMG reports
+Create AMG report
+}
+\examples{
+x <- find_peaks_response(ex_trace_tbl)
+create_report(ex_trace_tbl, x)
+
+# Changing the baseline will affect area under the curve calculation
+create_report(ex_trace_tbl, x, baseline = 0)
+
 }

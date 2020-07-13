@@ -1,6 +1,6 @@
 # create_reports ----------------------------------------------------------
 
-#' Create AMG reports
+#' Create AMG report
 #'
 #' @inheritParams find_stimuli
 #' @inheritParams find_peaks_stimulus
@@ -24,6 +24,13 @@
 #'   - `delay_mS`: Delay between the stimulus and the onset of the response
 #'   in milliseconds.
 #'
+#' @examples
+#' x <- find_peaks_response(ex_trace_tbl)
+#' create_report(ex_trace_tbl, x)
+#'
+#' # Changing the baseline will affect area under the curve calculation
+#' create_report(ex_trace_tbl, x, baseline = 0)
+#'
 #' @export
 
 create_report <- function(df, peaks,
@@ -41,11 +48,13 @@ create_report <- function(df, peaks,
   # Collect pieces for report
   # Delay in milliseconds
   delay <- (purrr::map_dbl(peaks, min) - stimuli) * 1000 / freq
+
+  # Max amplitude
   values <- find_values(df, peaks)
   peak_amp <- purrr::map_dbl(values, max)
 
   # 100 - pct to make value the decreasing percentage
-  # Multiply by 100 to make value a percentage
+  # Multiply by 100 to make value a percentage instead of decimal
   amp_decr_pct <- 100 - (peak_amp / peak_amp[[1]]) * 100
 
   # Area under the curve
