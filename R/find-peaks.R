@@ -5,7 +5,7 @@
 #' samples above the `baseline`.
 #'
 #' @seealso See [`find_peaks_stimulus()`] for another way to calculate the
-#' beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
+#'   beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
 #'
 #' @inheritParams find_stimuli
 #' @param baseline Baseline of signal. Function will find peaks above this
@@ -79,7 +79,7 @@ find_peaks_response <- function(df,
 #' method is the default.
 #'
 #' @seealso See [`find_peaks_response()`] for another way to calculate the
-#' beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
+#'   beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
 #'
 #' @inheritParams find_stimuli
 #' @param delay Delay in milliseconds from the onset of the stimulus to begin the
@@ -160,4 +160,44 @@ find_peaks_stimulus <- function(df, delay,
 
   # Create groups of samples from start to end of peak
   purrr::map2(start, end, seq)
+}
+
+
+#' Find peaks manually
+#'
+#' Helper function to manually define peaks. This can be useful if the other
+#' methods for finding peaks prove problematic. use visualization functions to
+#' find where peaks should begin and end.
+#'
+#' @param start Numeric. Where should the peak or peaks begin.
+#' @param end Numeric. Where should the peak or peaks end.
+#'
+#' @seealso See `find_peaks_response()` and `find_peaks_stimulus()` for
+#'   automatic methods for defining peaks.
+#'
+#' @return Returns a numeric vector if `start` and `end` are length 1.
+#'   Otherwise returns a list of numeric vectors.
+#'
+#' @examples
+#'
+#' find_peaks_manual(1, 100)
+#'
+#' find_peaks_manual(c(1, 101, 201), c(100, 200, 300))
+#'
+#' @export
+
+find_peaks_manual <- function(start, end) {
+  if (!is.numeric(start) || !is.numeric(end)) {
+    stop(call. = FALSE, "<start> and <end> must be numeric vectors.")
+  }
+
+  if (length(start) != length(end)) {
+    stop(call. = FALSE, "<start> and <end> must be the same length.")
+  }
+
+  if (length(start) == 1) {
+    seq(start, end)
+  } else {
+    purrr::map2(start, end, seq)
+  }
 }
