@@ -73,7 +73,7 @@ stimuli_filter <- function(df, stimulus_diff) {
 
   df %>%
     dplyr::mutate(amp_diff = .data$stimulus - dplyr::lag(.data$stimulus)) %>%
-    dplyr::filter(amp_diff > stimulus_diff) %>%
+    dplyr::filter(.data$amp_diff > stimulus_diff) %>%
     dplyr::filter(.data$sample - dplyr::lag(.data$sample, default = 0) != 1)
 }
 

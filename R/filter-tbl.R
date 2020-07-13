@@ -2,43 +2,50 @@
 
 #' Filter out all samples that are not a peak
 #'
-#' `filter_peaks()` is useful to plot only the peaks from a trace.
+#' Filter out all samples that are not a peak for purposes of plotting. The
+#' length of each peak can either be left as is or normalized to a single
+#' consistent length.
 #'
 #' @inheritParams find_stimuli
 #' @inheritParams peaks_delay
-#' @param length_out Default is 200. The length of each peak in samples. Use
-#'   `peaks_length()` to check length of peaks to find good value.
+#' @param length_out Length of each peak. Default is `NULL`, which leaves the
+#'   length of each peak as is. Use this argument to normalize the lengths of
+#'   the peaks so that they are all of equal length. Use `peaks_length()` to
+#'   check length of peaks to find good value.
 #'
-#' @return A tibble with rows equal to `length_out * length(peaks)` and six
-#'   columns. `filter_peaks()` creates two new columns: a `sub_sample` column
-#'   that is `1:length_out` for each peak and a `peak_nr` to identify each
-#'   peak.
+#' @return A tibble with two new columns: `sub_sample` provides the sample
+#'   number within each peak and `peak_nr` identifies the peaks.
 #'
 #' @examples
 #' x <- find_peaks_response(ex_trace_tbl)
 #'
+#' filter_peaks(ex_trace_tbl, x)
+#'
+#' # Normalize lengths of the peaks
 #' peaks_length(x)
 #'
-#' filter_peaks(ex_trace_tbl, x, 250)
+#' filter_peaks(ex_trace_tbl, x, length_out = 250)
 #'
 #' @export
 
-filter_peaks <- function(df, peaks, length_out = 200) {
-  peak_nr <- seq_along(peaks)
-  # Figure out the number of samples to be added to each group to equal length_out
-  lengthen <- (length_out - peaks_length(peaks)) %/% 2
+filter_peaks <- function(df, peaks, length_out = NULL) {
 
-  # Use below function to perform filtering and row bind with map2_df()
-  purrr::map2_df(peak_nr, lengthen, ~ .filter_peaks(df, peaks, .x, .y, length_out))
-}
+  if (!is.null(length_out)) {
+    # Make each peak the same length
+    # Lengths to add or subtract from each peak
+    lengthen <- (length_out - peaks_length(peaks)) %/% 2
+    # New start for each peak
+    start <- purrr::map_int(peaks, min) - lengthen
+    # Recreate peaks with vectors from start to length_out
+    peaks <- purrr::map(start, ~ seq(from = .x, length.out = length_out))
+  }
 
-# Function to perform the filtering and mutate
-.filter_peaks <- function(df, peaks, peak_nr, lengthen, length_out) {
-  df %>%
-    dplyr::filter(sample %in% seq(min(peaks[[peak_nr]]) - lengthen,
-                                  length.out = length_out)) %>%
-    dplyr::mutate(sub_sample = seq(length_out),
-                  peak_nr = peak_nr)
+  # Filter out samples not in peaks and create two new columns
+  purrr::map2_df(.x = peaks, .y = seq_along(peaks),
+                 ~ df %>%
+                   dplyr::filter(.data$sample %in% .x) %>%
+                   dplyr::mutate(sub_sample = seq_along(.x),
+                                 peak_nr = .y))
 }
 
 

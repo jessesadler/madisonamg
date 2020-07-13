@@ -4,7 +4,7 @@
 \alias{filter_peaks}
 \title{Filter out all samples that are not a peak}
 \usage{
-filter_peaks(df, peaks, length_out = 200)
+filter_peaks(df, peaks, length_out = NULL)
 }
 \arguments{
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
@@ -12,23 +12,28 @@ filter_peaks(df, peaks, length_out = 200)
 \item{peaks}{List of numeric vectors with the samples for where the peaks
 occur.}
 
-\item{length_out}{Default is 200. The length of each peak in samples. Use
-\code{peaks_length()} to check length of peaks to find good value.}
+\item{length_out}{Length of each peak. Default is \code{NULL}, which leaves the
+length of each peak as is. Use this argument to normalize the lengths of
+the peaks so that they are all of equal length. Use \code{peaks_length()} to
+check length of peaks to find good value.}
 }
 \value{
-A tibble with rows equal to \code{length_out * length(peaks)} and six
-columns. \code{filter_peaks()} creates two new columns: a \code{sub_sample} column
-that is \code{1:length_out} for each peak and a \code{peak_nr} to identify each
-peak.
+A tibble with two new columns: \code{sub_sample} provides the sample
+number within each peak and \code{peak_nr} identifies the peaks.
 }
 \description{
-\code{filter_peaks()} is useful to plot only the peaks from a trace.
+Filter out all samples that are not a peak for purposes of plotting. The
+length of each peak can either be left as is or normalized to a single
+consistent length.
 }
 \examples{
 x <- find_peaks_response(ex_trace_tbl)
 
+filter_peaks(ex_trace_tbl, x)
+
+# Normalize lengths of the peaks
 peaks_length(x)
 
-filter_peaks(ex_trace_tbl, x, 250)
+filter_peaks(ex_trace_tbl, x, length_out = 250)
 
 }
