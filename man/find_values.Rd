@@ -2,7 +2,7 @@
 % Please edit documentation in R/find-values.R
 \name{find_values}
 \alias{find_values}
-\title{Find values at given samples}
+\title{Find response amplitude values at given samples}
 \usage{
 find_values(df, samples)
 }
@@ -10,12 +10,19 @@ find_values(df, samples)
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
 
 \item{samples}{Numeric vector or list of vectors of sample numbers.
-Usually this will be a list of samples of peaks.}
+Usually this will be a list of samples of peaks from
+\code{find_peaks_response()} or \code{find_peaks_stimulus()}.}
 }
 \value{
 Returns either a list or a vector of response values depending
 on whether \code{samples} is a list or vector.
 }
 \description{
-Find values at given samples
+Find response amplitude values at given samples
+}
+\examples{
+peaks <- find_peaks_response(ex_trace_tbl)
+
+find_values(ex_trace_tbl, samples = peaks)
+
 }
