@@ -25,5 +25,5 @@ should begin after the stimuli. A warning is given if the value is more.}
 \description{
 This function is meant to be used to help check for any problems in finding
 the peaks via \code{find_peaks_response()} or \code{find_peaks_stimulus()}. It shows
-the number of samples between each stimulus and peak.
+the number of samples between each stimulus and the response peak.
 }

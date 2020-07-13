@@ -11,5 +11,7 @@ peaks_length(peaks)
 occur.}
 }
 \description{
-Check the number of samples in each peak.
+Helper function to check the number of samples in each peak. This is useful
+to help with functions that normalize the length of the peaks such as
+\code{filter_peaks()}.
 }

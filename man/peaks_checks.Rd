@@ -23,8 +23,8 @@ occur.}
 A vector of values
 }
 \description{
-Checks to help ensure that peaks were correctly identified by
-\code{find_peaks_response()} or \code{find_peaks_stimuli()}.
+Checks to help explore the peaks identified by \code{find_peaks_response()},
+\code{find_peaks_stimuli()}, or \code{find_peaks_manual()}.
 \itemize{
 \item \code{peaks_min_value()} finds the minimum value of each peak, essentially
 the smallest value above the baseline.

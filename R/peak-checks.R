@@ -3,15 +3,15 @@
 #' Checks for peak groups
 #'
 #' @description
-#' Checks to help ensure that peaks were correctly identified by
-#' `find_peaks_response()` or `find_peaks_stimuli()`.
+#' Checks to help explore the peaks identified by `find_peaks_response()`,
+#' `find_peaks_stimuli()`, or `find_peaks_manual()`.
 #'
 #' - `peaks_min_value()` finds the minimum value of each peak, essentially
-#' the smallest value above the baseline.
+#'   the smallest value above the baseline.
 #' - `peaks_first_value()` finds the first value of each peak. This should
-#' correspond with, or at least be close to, the minimum and first value(s).
+#'   correspond with, or at least be close to, the minimum and first value(s).
 #' - `peaks_last_value()` finds the last value of each peak. This should
-#' correspond with, or at least be close to, the minimum and first value(s).
+#'   correspond with, or at least be close to, the minimum and first value(s).
 #'
 #' The values may differ slightly because the values from the recordings are
 #' discrete and not continuous.
@@ -71,11 +71,10 @@ peaks_last_value <- function(df, peaks) {
 #'
 #' This function is meant to be used to help check for any problems in finding
 #' the peaks via `find_peaks_response()` or `find_peaks_stimulus()`. It shows
-#' the number of samples between each stimulus and peak.
+#' the number of samples between each stimulus and the response peak.
 #'
 #' @inheritParams find_stimuli
-#' @param peaks List of numeric vectors with the samples for where the peaks
-#'   occur.
+#' @inheritParams peaks_checks
 #' @param min_delay Default 0. Minimum number of samples that the peaks should
 #'   begin after the stimuli. A warning is given if the value is less.
 #' @param max_delay Default 200. Maximum number of samples that the peaks
@@ -85,7 +84,7 @@ peaks_last_value <- function(df, peaks) {
 
 peaks_delay <- function(df, peaks, stimulus_diff = 9000,
                         min_delay = 0, max_delay = 200) {
-  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
+  stimuli <- stimuli_samples(df, stimulus_diff)
 
   if (length(stimuli) != length(peaks)) {
     stop(call. = FALSE,
@@ -93,6 +92,7 @@ peaks_delay <- function(df, peaks, stimulus_diff = 9000,
                      from number of responses ({length(peaks)}) in <peaks>."))
   }
 
+  # Find delay between stimulus and peak
   delays <- purrr::map_dbl(peaks, min) - stimuli
 
   # Less than min delay
@@ -101,7 +101,8 @@ peaks_delay <- function(df, peaks, stimulus_diff = 9000,
     mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = ", and ")
 
     warning(call. = FALSE,
-            glue::glue("Peaks {mistakes} begin less than {min_delay} samples after the stimulus."))
+            glue::glue("Peaks {mistakes} begin less than {min_delay} samples",
+                       " after the stimulus."))
   }
 
   # More than max delay
@@ -110,7 +111,8 @@ peaks_delay <- function(df, peaks, stimulus_diff = 9000,
     mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = ", and ")
 
     warning(call. = FALSE,
-            glue::glue("Peaks {mistakes} begin more than {max_delay} samples after the stimulus."))
+            glue::glue("Peaks {mistakes} begin more than {max_delay} samples",
+                       " after the stimulus."))
   }
 
   delays
@@ -118,11 +120,18 @@ peaks_delay <- function(df, peaks, stimulus_diff = 9000,
 
 #' Check length of peaks
 #'
-#' Check the number of samples in each peak.
+#' Helper function to check the number of samples in each peak. This is useful
+#' to help with functions that normalize the length of the peaks such as
+#' `filter_peaks()`.
 #'
-#' @inheritParams peaks_delay
+#' @inheritParams peaks_checks
+#'
 #' @export
 
 peaks_length <- function(peaks) {
+  if (!is.list(peaks)) {
+    stop(call. = FALSE, "<peaks> must be a list of numeric vectors.")
+  }
+
   purrr::map_int(peaks, length)
 }
