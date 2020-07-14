@@ -18,7 +18,8 @@
 #'   last stimulus. Default is `TRUE`.
 #' @param highlight_color Color to be used to highlight response peaks.
 #'
-#' @seealso `viz_response_interactive()` for an interactive visualization.
+#' @seealso See `viz_response_interactive()` for an interactive visualization
+#'   of the response. See `viz_stimulus()` for plot of the stimulus.
 #'
 #' @examples
 #' viz_response(ex_trace_tbl)
@@ -87,6 +88,45 @@ viz_highlight_peaks <- function(df, peaks, buffer = 100,
                                     group = .data$peak_nr),
                        color = highlight_color)
 
+}
+
+#' Visualize full stimulus of trace
+#'
+#' Visualize full stimulus of a trace. The trace can be filtered from the first
+#' stimulus to the last stimulus to better visualize peaks or not, which may be
+#' useful to find any oddities in the data.
+#'
+#' This plot will not be of use for actual analysis. Instead, it is meant to
+#' provide a quick and easy way to see if there are any oddities in the
+#' stimulus data.
+#'
+#' @inheritParams find_stimuli
+#' @inheritParams full_plot
+#' @param filter_stimulus Whether to filter stimulus from the first to the
+#'   last stimulus. Default is `TRUE`.
+#'
+#' @examples
+#'
+#' viz_stimulus(ex_trace_tbl)
+#'
+#' @export
+
+viz_stimulus <- function(df, buffer = 100,
+                         stimulus_diff = 9000, freq = 10000,
+                         title = NULL,
+                         filter_stimulus = TRUE) {
+
+  if (filter_stimulus) {
+    stimuli <- stimuli_samples(df, stimulus_diff)
+    df <- buffer_df(df, stimuli, buffer, freq)
+  }
+
+  p <- ggplot2::ggplot(df) +
+    ggplot2::geom_line(ggplot2::aes(x = .data$sample, y = .data$stimulus)) +
+    ggplot2::labs(title = glue::glue({title}),
+                  x = NULL, y = NULL)
+
+  p
 }
 
 #' Facet wrap visualization of response peaks

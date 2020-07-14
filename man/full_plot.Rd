@@ -73,5 +73,6 @@ viz_response(ex_trace_tbl, filter_response = FALSE)
 
 }
 \seealso{
-\code{viz_response_interactive()} for an interactive visualization.
+See \code{viz_response_interactive()} for an interactive visualization
+of the response. See \code{viz_stimulus()} for plot of the stimulus.
 }
