@@ -70,13 +70,11 @@ filter_peaks <- function(df, peaks, length_out = NULL) {
 #' @export
 
 filter_full_stimuli <- function(df, buffer = 100,
-                                stimulus_diff = 9000, freq = 10000) {
-  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
+                                stimulus_diff = 9000,
+                                freq = 10000) {
+  stimuli <- stimuli_samples(df, stimulus_diff)
 
-  start <- min(stimuli) - buffer * freq / 1000
-  end <- max(stimuli) + buffer * freq / 1000
-
-  dplyr::filter(df, sample >= start & sample <= end)
+  buffer_df(df, stimuli, buffer, freq)
 }
 
 
@@ -99,9 +97,8 @@ filter_full_stimuli <- function(df, buffer = 100,
 #' @export
 
 filter_full_response <- function(df, peaks, buffer = 100, freq = 10000) {
+  # Beginning of first peak to end of last peak
+  extent <- c(min(peaks[[1]]), max(peaks[[length(peaks)]]))
 
-  start <- min(peaks[[1]]) - buffer * freq / 1000
-  end <- max(peaks[[length(peaks)]]) + buffer * freq / 1000
-
-  dplyr::filter(df, sample >= start & sample <= end)
+  buffer_df(df, extent, buffer, freq)
 }

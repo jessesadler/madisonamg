@@ -19,6 +19,6 @@ milliseconds.}
 \item{freq}{Frequency of the trace recording.}
 }
 \description{
-Used in visualization functions.
+Used in functions that provide ability to filter by response or stimulus.
 }
 \keyword{internal}
