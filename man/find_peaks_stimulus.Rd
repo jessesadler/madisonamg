@@ -9,7 +9,7 @@ find_peaks_stimulus(
   delay,
   freq = 10000,
   stimulus_diff = 9000,
-  baseline = NA,
+  baseline = NULL,
   min_length = 50
 )
 }

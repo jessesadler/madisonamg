@@ -113,7 +113,7 @@ find_peaks_response <- function(df,
 find_peaks_stimulus <- function(df, delay,
                                 freq = 10000,
                                 stimulus_diff = 9000,
-                                baseline = NA,
+                                baseline = NULL,
                                 min_length = 50) {
   # Get vector of samples where stimuli occur
   stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
