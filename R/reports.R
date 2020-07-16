@@ -51,7 +51,7 @@ create_report <- function(df, peaks,
 
   # Max amplitude
   values <- find_values(df, peaks)
-  peak_amp <- purrr::map_dbl(values, max)
+  peak_amp <- purrr::map_int(values, max)
 
   # 100 - pct to make value the decreasing percentage
   # Multiply by 100 to make value a percentage instead of decimal

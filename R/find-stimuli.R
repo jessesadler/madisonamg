@@ -42,7 +42,7 @@
 find_stimuli <- function(df, stimulus_diff = 9000) {
 
   # Filter to find stimuli
-  filtered <- stimuli_filter(df = df, stimulus_diff = stimulus_diff)
+  filtered <- stimuli_filter(df, stimulus_diff)
 
   # Add sample_diff and sec_diff columns
   filtered %>%
@@ -88,5 +88,5 @@ stimuli_filter <- function(df, stimulus_diff) {
 #' @keywords internal
 
 stimuli_samples <- function(df, stimulus_diff) {
-  stimuli_filter(df = df, stimulus_diff = stimulus_diff)[["sample"]]
+  stimuli_filter(df, stimulus_diff)[["sample"]]
 }

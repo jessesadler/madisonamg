@@ -6,7 +6,7 @@ Authors@R:
     email = "jrsadler@icloud.com",
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0001-6081-9681"))
-Description: Analysis of AMG recordings.
+Description: Analysis of AMG recordings for the neuromuscular lab.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -25,4 +25,6 @@ Imports:
     ggplot2 (>= 3.2.0),
     dygraphs
 Suggests: 
-    tuneR
+    tuneR,
+    testthat,
+    vdiffr

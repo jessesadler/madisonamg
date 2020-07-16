@@ -78,7 +78,7 @@ filter_full_stimuli <- function(df, buffer = 100,
 }
 
 
-#' Filter data frame by response
+#' Filter trace data frame by response
 #'
 #' Filter out anything before the first peak and after the last peak.
 #' This gets rid of all recordings before and after the performance of the

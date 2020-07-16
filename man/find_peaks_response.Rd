@@ -60,4 +60,5 @@ find_peaks_response(ex_trace_tbl, baseline = 400)
 \seealso{
 See \code{\link[=find_peaks_stimulus]{find_peaks_stimulus()}} for another way to calculate the
 beginning and ending of peaks. Use \code{\link[=peaks_delay]{peaks_delay()}} to check the output.
+To manually create peaks, see \code{\link[=find_peaks_manual]{find_peaks_manual()}}.
 }

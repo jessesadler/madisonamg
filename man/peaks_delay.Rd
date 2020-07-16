@@ -4,7 +4,14 @@
 \alias{peaks_delay}
 \title{Check delay between peaks and stimuli}
 \usage{
-peaks_delay(df, peaks, stimulus_diff = 9000, min_delay = 0, max_delay = 200)
+peaks_delay(
+  df,
+  peaks,
+  stimulus_diff = 9000,
+  freq = 10000,
+  min_delay = 0,
+  max_delay = 20
+)
 }
 \arguments{
 \item{df}{Data frame or tibble with sample, stimulus, and response columns.}
@@ -16,14 +23,18 @@ occur.}
 the stimulus recording increases by a given amount from the previous
 sample. Default is 9000, which seems to work for most recordings.}
 
-\item{min_delay}{Default 0. Minimum number of samples that the peaks should
-begin after the stimuli. A warning is given if the value is less.}
+\item{min_delay}{Default 0. Minimum number of milliseconds that the peaks
+should begin after the stimuli. A warning is given if the value is less.}
 
-\item{max_delay}{Default 200. Maximum number of samples that the peaks
+\item{max_delay}{Default 200. Maximum number of milliseconds that the peaks
 should begin after the stimuli. A warning is given if the value is more.}
+}
+\value{
+A numeric vector of delays between the stimulus and the beginning of
+each peak in milliseconds.
 }
 \description{
 This function is meant to be used to help check for any problems in finding
 the peaks via \code{find_peaks_response()} or \code{find_peaks_stimulus()}. It shows
-the number of samples between each stimulus and the response peak.
+the number of milliseconds between each stimulus and the response peak.
 }

@@ -31,7 +31,7 @@
 waveMC_to_tbl <- function(wav, freq) {
   # Check that wav is waveMC
   if (class(wav)[[1]] != "WaveMC") {
-    stop(call. = FALSE, "<wav> must be an object of class <WaveMC>")
+    stop(call. = FALSE, "<wav> must be an object of class <WaveMC>.")
   }
 
   # Access data from waveMC object

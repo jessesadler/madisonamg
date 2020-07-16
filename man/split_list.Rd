@@ -12,8 +12,9 @@ split_list(values, index)
 \item{index}{Vector of index to be used to split vector into list.}
 }
 \description{
-Creates a list whose elements are split when the index values are
-non-consecutive. Useful to turn tibble to list of numeric vectors.
+Creates a list of amplitudes whose elements are split when the index
+values are non-consecutive. Useful to turn tibble to list of numeric
+vectors.
 }
 \details{
 \code{values} and \code{index} will often be the same vector but need not be,

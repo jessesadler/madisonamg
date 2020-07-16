@@ -10,7 +10,7 @@ find_peaks_stimulus(
   freq = 10000,
   stimulus_diff = 9000,
   baseline = NULL,
-  min_length = 50
+  min_length = 100
 )
 }
 \arguments{
@@ -32,7 +32,8 @@ value using greater than. Can be vector of length 1 or length of the
 number of peaks.}
 
 \item{min_length}{Minimum length of the peak in samples. This helps to
-ensure measurement of peak does not end too early.}
+ensure measurement of peak does not end too early. If the value is too
+large, the end of the peak will be below the \code{baseline}.}
 }
 \value{
 Returns a list of numeric vectors the length of the number of peaks.
@@ -61,4 +62,5 @@ find_peaks_stimulus(ex_trace_tbl, delay = 6, baseline = 256)
 \seealso{
 See \code{\link[=find_peaks_response]{find_peaks_response()}} for another way to calculate the
 beginning and ending of peaks. Use \code{\link[=peaks_delay]{peaks_delay()}} to check the output.
+To manually create peaks, see \code{\link[=find_peaks_manual]{find_peaks_manual()}}.
 }

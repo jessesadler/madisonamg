@@ -2,7 +2,7 @@
 % Please edit documentation in R/filter-tbl.R
 \name{filter_full_response}
 \alias{filter_full_response}
-\title{Filter data frame by response}
+\title{Filter trace data frame by response}
 \usage{
 filter_full_response(df, peaks, buffer = 100, freq = 10000)
 }

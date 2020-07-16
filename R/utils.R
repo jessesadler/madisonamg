@@ -2,8 +2,9 @@
 
 #' Split vector of values by an index into a list
 #'
-#' Creates a list whose elements are split when the index values are
-#' non-consecutive. Useful to turn tibble to list of numeric vectors.
+#' Creates a list of amplitudes whose elements are split when the index
+#' values are non-consecutive. Useful to turn tibble to list of numeric
+#' vectors.
 #'
 #' `values` and `index` will often be the same vector but need not be,
 #' hence the use of two arguments.
@@ -49,7 +50,7 @@ samples_to_ms <- function(x, freq) {
 
 #' Create a buffer data frame to lengthen a filtered trace
 #'
-#' Used in visualization functions.
+#' Used in functions that provide ability to filter by response or stimulus.
 #'
 #' @param df A trace data frame.
 #' @param extent A vector of samples for the extent of filtered trace to which
@@ -67,5 +68,5 @@ buffer_df <- function(df, extent, buffer, freq) {
   start <- min(extent) - buffer
   end <- max(extent) + buffer
 
-  df <- dplyr::filter(df, .data$sample >= start & .data$sample <= end)
+  dplyr::filter(df, .data$sample >= start & .data$sample <= end)
 }

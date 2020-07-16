@@ -6,6 +6,7 @@
 #'
 #' @seealso See [`find_peaks_stimulus()`] for another way to calculate the
 #'   beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
+#'   To manually create peaks, see [`find_peaks_manual()`].
 #'
 #' @inheritParams find_stimuli
 #' @param baseline Baseline of signal. Function will find peaks above this
@@ -47,8 +48,6 @@ find_peaks_response <- function(df,
                                 min_amp = 1500,
                                 min_length = 50,
                                 lengthen = 100) {
-  # Samples to be added at beginning and end
-  lengthen <- lengthen %/% 2
 
   # Stage 1: Find groups of samples above min_amp that are
   #          also longer than min_length.
@@ -57,8 +56,12 @@ find_peaks_response <- function(df,
     purrr::keep(~ length(.x) > min_length)
 
   # Stage 2: Lengthen vectors and then find all responses above the baseline.
+
+  # Samples to be added at beginning and end
+  lengthen <- lengthen %/% 2
+
   expanded_list <- purrr::map(response_list,
-                              ~ seq(min(.) - lengthen, max(.) + lengthen))
+                              ~ seq(min(.x) - lengthen, max(.x) + lengthen))
   vals_list <- find_values(df, expanded_list)
   above_base <- purrr::map2(vals_list, baseline, ~ .x > .y) %>%
     purrr::flatten_lgl()
@@ -80,6 +83,7 @@ find_peaks_response <- function(df,
 #'
 #' @seealso See [`find_peaks_response()`] for another way to calculate the
 #'   beginning and ending of peaks. Use [`peaks_delay()`] to check the output.
+#'   To manually create peaks, see [`find_peaks_manual()`].
 #'
 #' @inheritParams find_stimuli
 #' @param delay Delay in milliseconds from the onset of the stimulus to begin the
@@ -91,7 +95,8 @@ find_peaks_response <- function(df,
 #'   value using greater than. Can be vector of length 1 or length of the
 #'   number of peaks.
 #' @param min_length Minimum length of the peak in samples. This helps to
-#'   ensure measurement of peak does not end too early.
+#'   ensure measurement of peak does not end too early. If the value is too
+#'   large, the end of the peak will be below the `baseline`.
 #'
 #' @return Returns a list of numeric vectors the length of the number of peaks.
 #'   The numeric vectors correspond to the samples that distinguish each peak.
@@ -114,12 +119,14 @@ find_peaks_stimulus <- function(df, delay,
                                 freq = 10000,
                                 stimulus_diff = 9000,
                                 baseline = NULL,
-                                min_length = 50) {
+                                min_length = 100) {
+  delay <- ms_to_samples(delay, freq)
+
   # Get vector of samples where stimuli occur
   stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
 
   # start of response
-  start <- stimuli + delay * freq / 1000
+  start <- stimuli + delay
 
   # Bases at start
   if (is.null(baseline)) {
