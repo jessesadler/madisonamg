@@ -86,51 +86,59 @@ peaks_last_amp <- function(df, peaks) {
 #'
 #' This function is meant to be used to help check for any problems in finding
 #' the peaks via `find_peaks_response()` or `find_peaks_stimulus()`. It shows
-#' the number of samples between each stimulus and the response peak.
+#' the number of milliseconds between each stimulus and the response peak.
 #'
 #' @inheritParams find_stimuli
 #' @inheritParams peaks_checks
-#' @param min_delay Default 0. Minimum number of samples that the peaks should
-#'   begin after the stimuli. A warning is given if the value is less.
-#' @param max_delay Default 200. Maximum number of samples that the peaks
+#' @param min_delay Default 0. Minimum number of milliseconds that the peaks
+#'   should begin after the stimuli. A warning is given if the value is less.
+#' @param max_delay Default 200. Maximum number of milliseconds that the peaks
 #'   should begin after the stimuli. A warning is given if the value is more.
+#'
+#' @return A numeric vector of delays between the stimulus and the beginning of
+#'   each peak in milliseconds.
 #'
 #' @export
 
-peaks_delay <- function(df, peaks, stimulus_diff = 9000,
-                        min_delay = 0, max_delay = 200) {
+peaks_delay <- function(df, peaks,
+                        stimulus_diff = 9000,
+                        freq = 10000,
+                        min_delay = 0, max_delay = 20) {
+
   stimuli <- stimuli_samples(df, stimulus_diff)
+  min_samples <- ms_to_samples(min_delay, freq)
+  max_samples <- ms_to_samples(max_delay, freq)
 
   if (length(stimuli) != length(peaks)) {
     stop(call. = FALSE,
          glue::glue("Number of stimuli found ({length(stimuli)}) is different
-                     from number of responses ({length(peaks)}) in <peaks>."))
+                     from number of peaks ({length(peaks)}) in <peaks>."))
   }
 
   # Find delay between stimulus and peak
   delays <- purrr::map_dbl(peaks, min) - stimuli
 
   # Less than min delay
-  if (any(delays < min_delay)) {
-    mistakes <- which(delays < min_delay)
-    mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = ", and ")
+  if (any(delays < min_samples)) {
+    mistakes <- which(delays < min_samples)
+    mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = " and ")
 
     warning(call. = FALSE,
-            glue::glue("Peaks {mistakes} begin less than {min_delay} samples",
-                       " after the stimulus."))
+            glue::glue("Peaks {mistakes} begin less than {min_delay}",
+                       " milliseconds after the stimulus."))
   }
 
   # More than max delay
-  if (any(delays > max_delay)) {
-    mistakes <- which(delays > max_delay)
-    mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = ", and ")
+  if (any(delays > max_samples)) {
+    mistakes <- which(delays > max_samples)
+    mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = " and ")
 
     warning(call. = FALSE,
-            glue::glue("Peaks {mistakes} begin more than {max_delay} samples",
-                       " after the stimulus."))
+            glue::glue("Peaks {mistakes} begin more than {max_delay}",
+                       " milliseconds after the stimulus."))
   }
-
-  delays
+  # Convert to ms
+  samples_to_ms(delays, freq)
 }
 
 #' Check length of peaks
@@ -147,6 +155,5 @@ peaks_length <- function(peaks) {
   if (!is.list(peaks)) {
     stop(call. = FALSE, "<peaks> must be a list of numeric vectors.")
   }
-
   purrr::map_int(peaks, length)
 }
