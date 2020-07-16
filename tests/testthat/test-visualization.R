@@ -1,5 +1,8 @@
 ## Tests for visualization functions ##
 
+# Need to add context() for vdiffr to work
+context("test-visualizations")
+
 tbl <- ex_trace_tbl
 x <- find_peaks_manual(
   start = c(35390, 45451, 55504, 65557, 75576, 85656, 95718, 105768, 115828, 125888),
