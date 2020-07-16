@@ -24,6 +24,11 @@ find_values <- function(df, samples) {
       stop(call. = FALSE,
            "<samples> must be a numeric vector or list of numeric vectors.")
     }
+
+    if (any(purrr::map_lgl(samples, is.double))) {
+      samples <- purrr::map(samples, as.integer)
+    }
+
     # Create vector of samples and filter df by smpl_vctr
     smpl_vctr <- purrr::flatten_int(samples)
 
