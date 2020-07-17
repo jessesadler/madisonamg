@@ -51,7 +51,7 @@ check_samples <- function(x, peaks = TRUE) {
   } else {
     type <- "samples"
   }
-  msg <- glue::glue("<{type}> must by a numeric vector or list of numeric vectors.")
+  msg <- glue::glue("<{type}> must be a numeric vector or list of numeric vectors.")
 
   if (is.list(x)) {
     if (!all(purrr::map_lgl(x, is.numeric))) {

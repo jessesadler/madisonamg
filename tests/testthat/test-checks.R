@@ -41,9 +41,9 @@ test_that("checks for samples and peaks work", {
   expect_silent(check_samples(y))
 
   expect_error(check_samples("hello"),
-               "<peaks> must by a numeric vector or list of numeric vectors.")
+               "<peaks> must be a numeric vector or list of numeric vectors.")
   expect_error(check_samples(list("hello", 1:5), peaks = FALSE),
-               "<samples> must by a numeric vector or list of numeric vectors.")
+               "<samples> must be a numeric vector or list of numeric vectors.")
 })
 
 test_that("checks for peak and stimuli length work", {
