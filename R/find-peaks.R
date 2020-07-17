@@ -200,11 +200,11 @@ find_peaks_stimulus <- function(df, delay,
 
 find_peaks_manual <- function(start, end) {
   if (!is.numeric(start) || !is.numeric(end)) {
-    stop(call. = FALSE, "<start> and <end> must be numeric vectors.")
+    rlang::abort("<start> and <end> must be numeric vectors.")
   }
 
   if (length(start) != length(end)) {
-    stop(call. = FALSE, "<start> and <end> must be the same length.")
+    rlang::abort("<start> and <end> must be the same length.")
   }
 
   if (length(start) == 1) {
