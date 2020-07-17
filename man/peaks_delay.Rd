@@ -23,6 +23,8 @@ occur.}
 the stimulus recording increases by a given amount from the previous
 sample. Default is 9000, which seems to work for most recordings.}
 
+\item{freq}{Frequency of recording. Used to convert milliseconds to samples.}
+
 \item{min_delay}{Default 0. Minimum number of milliseconds that the peaks
 should begin after the stimuli. A warning is given if the value is less.}
 

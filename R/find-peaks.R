@@ -48,6 +48,8 @@ find_peaks_response <- function(df,
                                 min_amp = 1500,
                                 min_length = 50,
                                 lengthen = 100) {
+  # Checks
+  check_trace(df)
 
   # Stage 1: Find groups of samples above min_amp that are
   #          also longer than min_length.
@@ -120,6 +122,9 @@ find_peaks_stimulus <- function(df, delay,
                                 stimulus_diff = 9000,
                                 baseline = NULL,
                                 min_length = 100) {
+  # Checks
+  check_trace(df)
+
   delay <- ms_to_samples(delay, freq)
 
   # Get vector of samples where stimuli occur

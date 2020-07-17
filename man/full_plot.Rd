@@ -40,7 +40,7 @@ sample. Default is 9000, which seems to work for most recordings.}
 
 \item{freq}{Frequency of recording.}
 
-\item{title}{Title for the plot}
+\item{title}{Title for the plot. A character vector of length 1.}
 
 \item{show_stimulus}{Default \code{TRUE}. Show onset of stimuli or not.}
 

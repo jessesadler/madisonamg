@@ -25,7 +25,7 @@ sample. Default is 9000, which seems to work for most recordings.}
 
 \item{freq}{Frequency of recording.}
 
-\item{title}{Title for the plot}
+\item{title}{Title for the plot. A character vector of length 1.}
 
 \item{filter_stimulus}{Whether to filter stimulus from the first to the
 last stimulus. Default is \code{TRUE}.}

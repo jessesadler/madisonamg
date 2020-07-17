@@ -30,6 +30,10 @@
 
 filter_peaks <- function(df, peaks, length_out = NULL) {
 
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
+
   if (!is.null(length_out)) {
     # Make each peak the same length
     # Lengths to add or subtract from each peak
@@ -72,6 +76,9 @@ filter_peaks <- function(df, peaks, length_out = NULL) {
 filter_full_stimuli <- function(df, buffer = 100,
                                 stimulus_diff = 9000,
                                 freq = 10000) {
+  # Checks
+  check_trace(df)
+
   stimuli <- stimuli_samples(df, stimulus_diff)
 
   buffer_df(df, stimuli, buffer, freq)
@@ -97,6 +104,10 @@ filter_full_stimuli <- function(df, buffer = 100,
 #' @export
 
 filter_full_response <- function(df, peaks, buffer = 100, freq = 10000) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
+
   # Beginning of first peak to end of last peak
   extent <- c(min(peaks[[1]]), max(peaks[[length(peaks)]]))
 

@@ -16,15 +16,13 @@
 #' @export
 
 find_values <- function(df, samples) {
+  # Checks
+  check_trace(df)
+  check_samples(samples, peaks = FALSE)
+
   # If statement for whether samples is a vector or list
 
   if (is.list(samples)) {
-    # Ensure samples is list of numeric vectors
-    if (!all(purrr::map_lgl(samples, is.numeric))) {
-      stop(call. = FALSE,
-           "<samples> must be a numeric vector or list of numeric vectors.")
-    }
-
     if (any(purrr::map_lgl(samples, is.double))) {
       samples <- purrr::map(samples, as.integer)
     }
@@ -37,13 +35,9 @@ find_values <- function(df, samples) {
     # Split vector to create a list by finding where samples are discontinuous
     split_list(out_df$response, out_df$sample)
 
-  } else if (is.numeric(samples)) {
+  } else {
     # Filter samples and get response vector
     dplyr::filter(df, .data$sample %in% samples) %>%
       dplyr::pull(.data$response)
-
-  } else {
-    stop(call. = FALSE,
-         "<samples> must be a numeric vector or list of numeric vectors.")
   }
 }

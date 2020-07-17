@@ -37,14 +37,13 @@ create_report <- function(df, peaks,
                           stimulus_diff = 9000,
                           freq = 10000,
                           baseline = NULL) {
-  stimuli <- stimuli_samples(df = df, stimulus_diff = stimulus_diff)
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
 
-  if (length(stimuli) != length(peaks)) {
-    stop(call. = FALSE,
-         glue::glue("Number of stimuli found ({nrow(stimuli)})",
-                    " is different from peaks ({length(peaks)})
-                    Check that <peaks> is correct or alter <stimulus_diff>."))
-  }
+  stimuli <- stimuli_samples(df, stimulus_diff)
+  check_lengths(stimuli, peaks)
+
   # Collect pieces for report
   # Delay in milliseconds
   delay <- (purrr::map_dbl(peaks, min) - stimuli) * 1000 / freq

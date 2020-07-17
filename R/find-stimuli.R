@@ -40,6 +40,8 @@
 #' @export
 
 find_stimuli <- function(df, stimulus_diff = 9000) {
+  # Checks
+  check_trace(df)
 
   # Filter to find stimuli
   filtered <- stimuli_filter(df, stimulus_diff)

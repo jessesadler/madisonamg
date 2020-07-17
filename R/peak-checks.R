@@ -29,55 +29,56 @@ NULL
 #' @rdname peaks_checks
 #' @export
 peaks_min_amp <- function(df, peaks) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
 
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), min)
-  } else if (is.numeric(peaks)) {
-    min(find_values(df, peaks))
   } else {
-    stop(call. = FALSE,
-         "<peaks> must by a numeric vector or list of numeric vectors")
+    min(find_values(df, peaks))
   }
 }
 
 #' @rdname peaks_checks
 #' @export
 peaks_max_amp <- function(df, peaks) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
 
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), max)
-  } else if (is.numeric(peaks)) {
-    max(find_values(df, peaks))
   } else {
-    stop(call. = FALSE,
-         "<peaks> must by a numeric vector or list of numeric vectors")
+    max(find_values(df, peaks))
   }
 }
 
 #' @rdname peaks_checks
 #' @export
 peaks_first_amp <- function(df, peaks) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
 
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), dplyr::first)
-  } else if (is.numeric(peaks)) {
-    dplyr::first(find_values(df, peaks))
   } else {
-    stop(call. = FALSE,
-         "<peaks> must by a numeric vector or list of numeric vectors")
+    dplyr::first(find_values(df, peaks))
   }
 }
 
 #' @rdname peaks_checks
 #' @export
 peaks_last_amp <- function(df, peaks) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
+
   if (is.list(peaks)) {
     purrr::map_int(find_values(df, peaks), dplyr::last)
-  } else if (is.numeric(peaks)) {
-    dplyr::last(find_values(df, peaks))
   } else {
-    stop(call. = FALSE,
-         "<peaks> must by a numeric vector or list of numeric vectors")
+    dplyr::last(find_values(df, peaks))
   }
 }
 
@@ -90,6 +91,7 @@ peaks_last_amp <- function(df, peaks) {
 #'
 #' @inheritParams find_stimuli
 #' @inheritParams peaks_checks
+#' @inheritParams find_peaks_stimulus
 #' @param min_delay Default 0. Minimum number of milliseconds that the peaks
 #'   should begin after the stimuli. A warning is given if the value is less.
 #' @param max_delay Default 200. Maximum number of milliseconds that the peaks
@@ -104,16 +106,15 @@ peaks_delay <- function(df, peaks,
                         stimulus_diff = 9000,
                         freq = 10000,
                         min_delay = 0, max_delay = 20) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
 
   stimuli <- stimuli_samples(df, stimulus_diff)
+  check_lengths(stimuli, peaks)
+
   min_samples <- ms_to_samples(min_delay, freq)
   max_samples <- ms_to_samples(max_delay, freq)
-
-  if (length(stimuli) != length(peaks)) {
-    stop(call. = FALSE,
-         glue::glue("Number of stimuli found ({length(stimuli)}) is different
-                     from number of peaks ({length(peaks)}) in <peaks>."))
-  }
 
   # Find delay between stimulus and peak
   delays <- purrr::map_dbl(peaks, min) - stimuli
@@ -152,8 +153,12 @@ peaks_delay <- function(df, peaks,
 #' @export
 
 peaks_length <- function(peaks) {
-  if (!is.list(peaks)) {
-    stop(call. = FALSE, "<peaks> must be a list of numeric vectors.")
+  # Checks
+  check_samples(peaks)
+
+  if (is.list(peaks)) {
+    purrr::map_int(peaks, length)
+  } else {
+    length(peaks)
   }
-  purrr::map_int(peaks, length)
 }

@@ -12,7 +12,7 @@
 #' @param freq Frequency of recording.
 #' @param buffer Buffer to add to the beginning and end of the plot in
 #'   milliseconds if `filter_response = TRUE`.
-#' @param title Title for the plot
+#' @param title Title for the plot. A character vector of length 1.
 #' @param show_stimulus Default `TRUE`. Show onset of stimuli or not.
 #' @param filter_response Whether to filter response from the first to the
 #'   last stimulus. Default is `TRUE`.
@@ -43,6 +43,8 @@ viz_response <- function(df, buffer = 100,
                          title = NULL,
                          show_stimulus = TRUE,
                          filter_response = TRUE) {
+  # Checks
+  check_trace(df)
 
   stimuli_df <- stimuli_filter(df, stimulus_diff)
 
@@ -115,6 +117,8 @@ viz_stimulus <- function(df, buffer = 100,
                          stimulus_diff = 9000, freq = 10000,
                          title = NULL,
                          filter_stimulus = TRUE) {
+  # Checks
+  check_trace(df)
 
   if (filter_stimulus) {
     stimuli <- stimuli_samples(df, stimulus_diff)
@@ -144,6 +148,10 @@ viz_stimulus <- function(df, buffer = 100,
 #' @export
 
 viz_peak_facet <- function(df, peaks) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
+
   peak_nr <- seq(length(peaks))
 
   purrr::map2_df(.x = peaks, .y = peak_nr,
@@ -209,6 +217,9 @@ viz_peak <- function(df, peaks, peak_nr, buffer = 10,
                      show_stimulus = TRUE,
                      annotate = TRUE,
                      min_delay = 0, max_delay = 50) {
+  # Checks
+  check_trace(df)
+  check_samples(peaks)
 
   peak_samples <- peaks[[peak_nr]]
   peak_df <- dplyr::filter(df, .data$sample %in% peak_samples)
@@ -307,6 +318,12 @@ viz_response_interactive <- function(df, peaks = NULL,
                                      filter_response = TRUE,
                                      show_stimulus = TRUE,
                                      shade_peaks = TRUE) {
+  # Checks
+  check_trace(df)
+  if (!is.null(peaks)) {
+    check_samples(peaks)
+  }
+
   if (is.null(peaks)) {
     shade_peaks <- FALSE
   }
