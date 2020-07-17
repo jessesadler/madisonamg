@@ -33,4 +33,5 @@ test_that("peaks delay works", {
 
 test_that("peaks length works", {
   expect_equal(peaks_length(x), c(204, 200, 197, 215, 250, 222, 215, 211, 215, 200))
+  expect_equal(peaks_length(x[[2]]), 200)
 })
