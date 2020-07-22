@@ -220,6 +220,7 @@ viz_peak <- function(df, peaks, peak_nr, buffer = 10,
   # Checks
   check_trace(df)
   check_samples(peaks)
+  check_basline(baseline, peaks)
 
   peak_samples <- peaks[[peak_nr]]
   peak_df <- dplyr::filter(df, .data$sample %in% peak_samples)

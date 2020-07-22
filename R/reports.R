@@ -40,6 +40,7 @@ create_report <- function(df, peaks,
   # Checks
   check_trace(df)
   check_samples(peaks)
+  check_basline(baseline, peaks)
 
   stimuli <- stimuli_samples(df, stimulus_diff)
   check_lengths(stimuli, peaks)

@@ -95,3 +95,24 @@ check_lengths <- function(stimuli, peaks) {
     }
   }
 }
+
+#' Check baseline
+#'
+#' Check that baseline is either NULL, a numeric vector of length 1, or of
+#' length equal to the length of peaks.
+#'
+#' @param baseline Baseline amplitude to be used for calculations.
+#' @param peaks A list of numeric vectors or a numeric vectors of samples.
+#'
+#' @keywords internal
+
+check_basline <- function(baseline, peaks) {
+  if (!is.null(baseline)) {
+    if (!is.numeric(baseline)) {
+      rlang::abort("<baseline> must be a numeric vector.")
+    }
+    if (length(baseline) != 1 && length(baseline) != length(peaks)) {
+      rlang::abort("<baseline> must be either length 1 or the same length as <peaks>.")
+    }
+  }
+}

@@ -39,7 +39,7 @@ test_that("checks for samples and peaks work", {
   # Good ones work
   expect_silent(check_samples(x))
   expect_silent(check_samples(y))
-
+  # Errors expected
   expect_error(check_samples("hello"),
                "<peaks> must be a numeric vector or list of numeric vectors.")
   expect_error(check_samples(list("hello", 1:5), peaks = FALSE),
@@ -55,4 +55,17 @@ test_that("checks for peak and stimuli length work", {
   expect_error(check_lengths(y[1:5], x))
   # peaks is a vector
   expect_error(check_lengths(y, y))
+})
+
+test_that("checks for baseline work", {
+  # Good ones work
+  expect_silent(check_basline(NULL, x))
+  expect_silent(check_basline(0, x))
+  expect_silent(check_basline(1:10, x))
+
+  # Errors expected
+  expect_error(check_basline("hello", x),
+               "<baseline> must be a numeric vector.")
+  expect_error(check_basline(1:8, x),
+               "<baseline> must be either length 1 or the same length as <peaks>.")
 })
