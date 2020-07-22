@@ -30,8 +30,3 @@ test_that("peaks delay works", {
   expect_warning(peaks_delay(tbl, x, max_delay = 6.5),
                  "Peaks 2 and 10 begin more than 6.5 milliseconds after the stimulus.")
 })
-
-test_that("peaks length works", {
-  expect_equal(peaks_length(x), c(204, 200, 197, 215, 250, 222, 215, 211, 215, 200))
-  expect_equal(peaks_length(x[[2]]), 200)
-})

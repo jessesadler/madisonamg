@@ -141,24 +141,3 @@ peaks_delay <- function(df, peaks,
   # Convert to ms
   samples_to_ms(delays, freq)
 }
-
-#' Check length of peaks
-#'
-#' Helper function to check the number of samples in each peak. This is useful
-#' to help with functions that normalize the length of the peaks such as
-#' `filter_peaks()`.
-#'
-#' @inheritParams peaks_checks
-#'
-#' @export
-
-peaks_length <- function(peaks) {
-  # Checks
-  check_samples(peaks)
-
-  if (is.list(peaks)) {
-    purrr::map_int(peaks, length)
-  } else {
-    length(peaks)
-  }
-}
