@@ -6,7 +6,11 @@ Authors@R:
     email = "jrsadler@icloud.com",
     role = c("aut", "cre"),
     comment = c(ORCID = "0000-0001-6081-9681"))
-Description: Analysis of AMG recordings for the neuromuscular lab.
+Description: Analysis of AMG recordings for the neuromuscular lab. The package
+    has four goals: to simplify the process of loading the data into R and
+    identifying any issues with the data, finding the peaks of the response,
+    performing analysis on the data, and visualizing the AMG data for both
+    analysis and presentation.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

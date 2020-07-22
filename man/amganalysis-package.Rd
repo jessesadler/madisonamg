@@ -6,7 +6,11 @@
 \alias{amganalysis-package}
 \title{amganalysis: Analysis of AMG Recordings in R}
 \description{
-Analysis of AMG recordings for the neuromuscular lab.
+Analysis of AMG recordings for the neuromuscular lab. The package
+    has four goals: to simplify the process of loading the data into R and
+    identifying any issues with the data, finding the peaks of the response,
+    performing analysis on the data, and visualizing the AMG data for both
+    analysis and presentation.
 }
 \author{
 \strong{Maintainer}: Jesse Sadler \email{jrsadler@icloud.com} (\href{https://orcid.org/0000-0001-6081-9681}{ORCID})
