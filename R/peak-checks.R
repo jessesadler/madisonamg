@@ -124,9 +124,8 @@ peaks_delay <- function(df, peaks,
     mistakes <- which(delays < min_samples)
     mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = " and ")
 
-    warning(call. = FALSE,
-            glue::glue("Peaks {mistakes} begin less than {min_delay}",
-                       " milliseconds after the stimulus."))
+    rlang::warn(glue::glue("Peak(s) {mistakes} begin less than {min_delay}",
+                           " milliseconds after the stimulus."))
   }
 
   # More than max delay
@@ -134,9 +133,8 @@ peaks_delay <- function(df, peaks,
     mistakes <- which(delays > max_samples)
     mistakes <- glue::glue_collapse({mistakes}, sep = ", ", last = " and ")
 
-    warning(call. = FALSE,
-            glue::glue("Peaks {mistakes} begin more than {max_delay}",
-                       " milliseconds after the stimulus."))
+    rlang::warn(glue::glue("Peak(s) {mistakes} begin more than {max_delay}",
+                           " milliseconds after the stimulus."))
   }
   # Convert to ms
   samples_to_ms(delays, freq)

@@ -25,8 +25,6 @@ test_that("checks for peak groups work", {
 
 test_that("peaks delay works", {
   expect_equal(peaks_delay(tbl, y), rep(5, 10))
-  expect_warning(peaks_delay(tbl, x, min_delay = 6),
-                 "Peaks 1, 5, 6 and 8 begin less than 6 milliseconds after the stimulus.")
-  expect_warning(peaks_delay(tbl, x, max_delay = 6.5),
-                 "Peaks 2 and 10 begin more than 6.5 milliseconds after the stimulus.")
+  expect_warning(peaks_delay(tbl, x, min_delay = 6))
+  expect_warning(peaks_delay(tbl, x, max_delay = 6.5))
 })
