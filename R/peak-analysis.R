@@ -9,7 +9,7 @@
 #' @inheritParams peaks_checks
 #' @param samples Whether to return the number of samples in the peaks, the
 #'   default, or the length in milliseconds if set to `FALSE`.
-#' @param Frequency of recording. Used to convert milliseconds to samples.
+#' @param freq Frequency of recording. Used to convert milliseconds to samples.
 #'   Default is `NULL` and only used if `samples = FALSE`.
 #'
 #' @return A numeric vector showing the number of samples in each peak if

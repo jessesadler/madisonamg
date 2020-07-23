@@ -13,7 +13,7 @@ occur.}
 \item{samples}{Whether to return the number of samples in the peaks, the
 default, or the length in milliseconds if set to \code{FALSE}.}
 
-\item{Frequency}{of recording. Used to convert milliseconds to samples.
+\item{freq}{Frequency of recording. Used to convert milliseconds to samples.
 Default is \code{NULL} and only used if \code{samples = FALSE}.}
 }
 \value{
