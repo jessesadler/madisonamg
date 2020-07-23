@@ -27,8 +27,9 @@ sample. Default is 9000, which seems to work for most recordings.}
 
 \item{title}{Title for the plot. A character vector of length 1.}
 
-\item{filter_stimulus}{Whether to filter stimulus from the first to the
-last stimulus. Default is \code{TRUE}.}
+\item{filter_stimulus}{Whether to only visualize the stimulus from the
+first to the last stimulus (\code{TRUE}) or to visualize the whole recording
+(\code{FALSE}). Used to exclude extraneous recording. Default is \code{TRUE}.}
 }
 \description{
 Visualize full stimulus of a trace. The trace can be filtered from the first

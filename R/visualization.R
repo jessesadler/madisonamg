@@ -14,8 +14,9 @@
 #'   milliseconds if `filter_response = TRUE`.
 #' @param title Title for the plot. A character vector of length 1.
 #' @param show_stimulus Default `TRUE`. Show onset of stimuli or not.
-#' @param filter_response Whether to filter response from the first to the
-#'   last stimulus. Default is `TRUE`.
+#' @param filter_response Whether to only visualize the response from the
+#'   first to the last stimulus (`TRUE`) or to visualize the whole recording
+#'   (`FALSE`). Used to exclude extraneous recording. Default is `TRUE`.
 #' @param highlight_color Color to be used to highlight response peaks.
 #'
 #' @seealso See `viz_response_interactive()` for an interactive visualization
@@ -104,8 +105,9 @@ viz_highlight_peaks <- function(df, peaks, buffer = 100,
 #'
 #' @inheritParams find_stimuli
 #' @inheritParams full_plot
-#' @param filter_stimulus Whether to filter stimulus from the first to the
-#'   last stimulus. Default is `TRUE`.
+#' @param filter_stimulus Whether to only visualize the stimulus from the
+#'   first to the last stimulus (`TRUE`) or to visualize the whole recording
+#'   (`FALSE`). Used to exclude extraneous recording. Default is `TRUE`.
 #'
 #' @examples
 #'

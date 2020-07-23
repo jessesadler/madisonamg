@@ -24,5 +24,6 @@ test_that("find stimuli function works", {
   expect_equal(nrow(find_stimuli(tbl, 9000)), 10)
   expect_equal(names(find_stimuli(tbl, 9000)),
                c("sample", "secs", "stimulus", "response",
-                 "amp_diff", "sample_diff", "sec_diff"))
+                 "amp_diff", "sample_diff", "sec_diff", "hz"))
+  expect_equal(find_stimuli(tbl, 9000)$hz, c(NA, rep(1, 9)))
 })

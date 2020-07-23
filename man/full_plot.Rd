@@ -44,8 +44,9 @@ sample. Default is 9000, which seems to work for most recordings.}
 
 \item{show_stimulus}{Default \code{TRUE}. Show onset of stimuli or not.}
 
-\item{filter_response}{Whether to filter response from the first to the
-last stimulus. Default is \code{TRUE}.}
+\item{filter_response}{Whether to only visualize the response from the
+first to the last stimulus (\code{TRUE}) or to visualize the whole recording
+(\code{FALSE}). Used to exclude extraneous recording. Default is \code{TRUE}.}
 
 \item{peaks}{List of numeric vectors with the samples for where the peaks
 occur.}

@@ -30,8 +30,9 @@ sample. Default is 9000, which seems to work for most recordings.}
 
 \item{freq}{Frequency of recording.}
 
-\item{filter_response}{Whether to filter response from the first to the
-last stimulus. Default is \code{TRUE}.}
+\item{filter_response}{Whether to only visualize the response from the
+first to the last stimulus (\code{TRUE}) or to visualize the whole recording
+(\code{FALSE}). Used to exclude extraneous recording. Default is \code{TRUE}.}
 
 \item{show_stimulus}{Default \code{TRUE}. Show onset of stimuli or not.}
 
