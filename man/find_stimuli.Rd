@@ -15,7 +15,7 @@ sample. Default is 9000, which seems to work for most recordings.}
 }
 \value{
 Returns a data frame in which each row shows the onset of the
-stimulus. Adds \code{amp_diff}, \code{samp_diff}, and \code{sec_diff} columns.
+stimulus. Adds \code{amp_diff}, \code{samp_diff}, \code{sec_diff}, and \code{hz} columns.
 }
 \description{
 Find when stimuli were performed by change in recorded amplitude of the
@@ -31,6 +31,7 @@ found the stimuli.
 \item \code{sec_diff} shows the time difference between stimuli as seconds. These
 variables are useful for finding or checking the frequency of the stimuli
 and for finding any oddities in the data.
+\item \code{hz} The calculated hertz of the stimuli.
 }
 }
 \examples{

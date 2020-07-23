@@ -15,6 +15,7 @@
 #' - `sec_diff` shows the time difference between stimuli as seconds. These
 #'   variables are useful for finding or checking the frequency of the stimuli
 #'   and for finding any oddities in the data.
+#' - `hz` The calculated hertz of the stimuli.
 #'
 #' @param df Data frame or tibble with sample, stimulus, and response columns.
 #' @param stimulus_diff The stimulus is found by seeing when the amplitude of
@@ -22,7 +23,7 @@
 #'   sample. Default is 9000, which seems to work for most recordings.
 #'
 #' @return Returns a data frame in which each row shows the onset of the
-#'   stimulus. Adds `amp_diff`, `samp_diff`, and `sec_diff` columns.
+#'   stimulus. Adds `amp_diff`, `samp_diff`, `sec_diff`, and `hz` columns.
 #'
 #' @examples
 #'
@@ -49,7 +50,8 @@ find_stimuli <- function(df, stimulus_diff = 9000) {
   # Add sample_diff and sec_diff columns
   filtered %>%
     dplyr::mutate(sample_diff = .data$sample - dplyr::lag(.data$sample),
-                  sec_diff = .data$secs - dplyr::lag(.data$secs))
+                  sec_diff = .data$secs - dplyr::lag(.data$secs),
+                  hz = round(1 / .data$sec_diff))
 }
 
 
