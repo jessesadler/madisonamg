@@ -39,8 +39,18 @@ waveMC_to_tbl <- function(wav, freq) {
   right <- wav@.Data[, 2] # right channel
 
   # Determine which channel is stimulus and which is response
-  c1 <- dplyr::if_else(max(left) > max(right), "stimulus", "response")
-  c2 <- dplyr::if_else(max(left) < max(right), "stimulus", "response")
+
+  if (identical(max(left), max(right))) {
+    c1 <- "stimulus"
+    c2 <- "response"
+
+    rlang::warn("Maximum amplitude of the stimulus and response are identical.",
+                " Check the data and also confirm which channel is the response",
+                " and which is the stimulus.")
+  } else {
+    c1 <- dplyr::if_else(max(left) > max(right), "stimulus", "response")
+    c2 <- dplyr::if_else(max(left) < max(right), "stimulus", "response")
+  }
 
   # Create and return tibble
   tibble::tibble(!!c1 := left,
