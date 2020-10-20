@@ -13,32 +13,32 @@ knitr::opts_chunk$set(
 )
 ```
 
-# amganalysis
+# madisonamg
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of `amganalysis` is to provide a simplified pathway for loading AMG data, checking for any issues, finding peaks of the response, analyzing the data, and visualizing it.
+The goal of `madisonamg` is to provide a simplified pathway for loading AMG data, checking for any issues, finding peaks of the response, analyzing the data, and visualizing it. `madisonamg` (Madison AMG) is named in honor of Madison, a golden retriever who passed away from myasthenia gravis, an autoimmune neuromuscular disease.
 
 ## Example analysis
 
-This document shows the basic capabilities of the `amganalysis` package and how an analysis of a trace might be performed.
+This document shows the basic capabilities of the `madisonamg` package and how an analysis of a trace might be performed.
 
 ```{r load-package}
-library(amganalysis)
+library(madisonamg)
 ```
 
 ### The data
 
-The data is expected to be imported as a wave file using `tuneR::readWave("path/file.wav", toWaveMC = TRUE)`. Make sure to set `toWaveMC = TRUE`, which imports multiple tracks, since `amganalysis` functions expect readings for the amplitude of both the stimulus and the response. `amganalysis` provides an example wave file imported in this fashion: `ex_waveMC`. Let's load it.
+The data is expected to be imported as a wave file using `tuneR::readWave("path/file.wav", toWaveMC = TRUE)`. Make sure to set `toWaveMC = TRUE`, which imports multiple tracks, since `madisonamg` functions expect readings for the amplitude of both the stimulus and the response. `madisonamg` provides an example wave file imported in this fashion: `ex_waveMC`. Let's load it.
 
 ```{r load-data}
 wav <- ex_waveMC
 ```
 
-To work with the data we need to get it into the form of a data frame with `waveMC_to_tbl()`. This will make it much easier to use the normal data analysis pipeline of R and the [tidyverse](https://www.tidyverse.org) on the AMG data. `waveMC_to_tbl()` also creates a data frame, or [tibble](https://tibble.tidyverse.org/), that conforms to the structure expected by the functions in `amganalysis`. We can refer to this as a trace tibble. `waveMC_to_tbl()` creates a tibble with four columns: sample, secs, stimulus, and response. The function automatically distinguishes the stimulus recording channel from the response recording channel. The frequency (`freq` argument) of the recording is used to convert samples into seconds (secs). The secs variable is there for convenience. It makes it easier to see how long the recording is, where events are in the recording, or how far apart they are.
+To work with the data we need to get it into the form of a data frame with `waveMC_to_tbl()`. This will make it much easier to use the normal data analysis pipeline of R and the [tidyverse](https://www.tidyverse.org) on the AMG data. `waveMC_to_tbl()` also creates a data frame, or [tibble](https://tibble.tidyverse.org/), that conforms to the structure expected by the functions in `madisonamg`. We can refer to this as a trace tibble. `waveMC_to_tbl()` creates a tibble with four columns: sample, secs, stimulus, and response. The function automatically distinguishes the stimulus recording channel from the response recording channel. The frequency (`freq` argument) of the recording is used to convert samples into seconds (secs). The secs variable is there for convenience. It makes it easier to see how long the recording is, where events are in the recording, or how far apart they are.
 
-Let's make a trace tibble with `waveMC_to_tbl()`. This is equivalent to the example data `ex_trace_tbl` which comes with `amganalysis`.
+Let's make a trace tibble with `waveMC_to_tbl()`. This is equivalent to the example data `ex_trace_tbl` which comes with `madisonamg`.
 
 ```{r create-tbl}
 trace_tbl <- waveMC_to_tbl(wav, freq = 10000)
@@ -46,7 +46,7 @@ trace_tbl <- waveMC_to_tbl(wav, freq = 10000)
 trace_tbl
 ```
 
-Most functions from `amganalysis` expect a trace tibble as an input. A **trace tibble** is a data frame or tibble with numeric columns named "sample", "stimulus", and "response" plus any other metadata columns such as secs. If any of these three columns are not present or if they have different names, the functions in `amganalysis` will not work.
+Most functions from `madisonamg` expect a trace tibble as an input. A **trace tibble** is a data frame or tibble with numeric columns named "sample", "stimulus", and "response" plus any other metadata columns such as secs. If any of these three columns are not present or if they have different names, the functions in `madisonamg` will not work.
 
 ### Examing the data
 
@@ -71,7 +71,7 @@ library(ggplot2)
 viz_response(trace_tbl,
              title = "Response",
              show_stimulus = FALSE,
-             buffer = 250) + 
+             buffer = 1000) + 
   theme_void()
 ```
 
@@ -87,11 +87,11 @@ find_stimuli(trace_tbl)
 
 In addition to finding the number of stimuli and the samples where they were performed, `find_stimuli(trace_tbl)` shows the time gap between stimuli and the calculated hertz. In this case, we can see that the stimuli were performed once per second, or 1hz.
 
-Finding the peaks of the response is a bit more difficult and not nearly as clear cut. Looking at the response column in the output from `find_stimuli(trace_tbl)`, you can see that the response amplitude differs between -128 and 448. There is no completely consistent baseline. It can, therefore, be difficult to determine when the amplitude of the response begins to rise as a result of the stimulus. `amganalysis` provides three functions to help find peaks: `find_peaks_response()`, `find_peaks_stimulus()`, and `find_peaks_manual()`. These functions should most likely be used in this order.
+Finding the peaks of the response is a bit more difficult and not nearly as clear cut. Looking at the response column in the output from `find_stimuli(trace_tbl)`, you can see that the response amplitude differs between -128 and 448. There is no completely consistent baseline. It can, therefore, be difficult to determine when the amplitude of the response begins to rise as a result of the stimulus. `madisonamg` provides three functions to help find peaks: `find_peaks_response()`, `find_peaks_stimulus()`, and `find_peaks_manual()`. These functions should most likely be used in this order.
 
 `find_peaks_response()` is the most robust method and works well when the peaks are relatively uniform. It works by finding response amplitudes above a specified `min_amp` and then extends the region down to all samples above the given `baseline`. The defaults all work pretty well with the `trace_tbl` data, but they may have to be altered for different data. In particular, the `baseline` argument can be manipulated to have unique baselines for each peak if the data is a bit messier.
 
-It should also be noted that instead of returning a tibble, the `find_peaks_()` functions return a list of numeric vectors of the samples where the peaks occur. This data type is used throughout the `amganalysis` package wherever there is a `peaks` argument.
+It should also be noted that instead of returning a tibble, the `find_peaks_()` functions return a list of numeric vectors of the samples where the peaks occur. This data type is used throughout the `madisonamg` package wherever there is a `peaks` argument.
 
 ```{r find-peaks-response}
 peaks <- find_peaks_response(trace_tbl)

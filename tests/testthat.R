@@ -1,4 +1,4 @@
 library(testthat)
-library(amganalysis)
+library(madisonamg)
 
-test_check("amganalysis")
+test_check("madisonamg")

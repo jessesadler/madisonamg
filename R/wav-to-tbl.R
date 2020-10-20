@@ -20,7 +20,7 @@
 #' - `stimulus`: integer reading of the stimulus recording.
 #' - `response`: integer reading of the response recording.
 #'
-#' All other functions in `amganalysis` are built around a tibble with this
+#' All other functions in `madisonamg` are built around a tibble with this
 #' structure.
 #'
 #' @examples

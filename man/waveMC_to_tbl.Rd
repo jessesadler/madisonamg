@@ -21,7 +21,7 @@ Returns a tibble with four columns:
 \item \code{response}: integer reading of the response recording.
 }
 
-All other functions in \code{amganalysis} are built around a tibble with this
+All other functions in \code{madisonamg} are built around a tibble with this
 structure.
 }
 \description{
