@@ -13,6 +13,19 @@ analyzing the data, and visualizing it. `madisonamg` (Madison AMG) is
 named in honor of Madison, a golden retriever who passed away from
 myasthenia gravis, an autoimmune neuromuscular disease.
 
+## Installation
+
+You can install `madisonamg` from GitHub with
+[remotes](https://remotes.r-lib.org):
+
+``` r
+# install.packages("remotes")
+remotes::install_github("jessesadler/madisonamg")
+```
+
+Please open an [issue](https://github.com/jessesadler/madisonamg/issues)
+if you have any questions, comments, or requests.
+
 ## Example analysis
 
 This document shows the basic capabilities of the `madisonamg` package
