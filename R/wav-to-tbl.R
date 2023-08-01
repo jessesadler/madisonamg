@@ -40,9 +40,9 @@ waveMC_to_tbl <- function(wav, freq) {
 
   # Determine which channel is stimulus and which is response
 
-  if (identical(max(right), max(left))) {
-    c1 <- "stimulus"
-    c2 <- "response"
+  if (identical(max(left), max(right))) {
+    c1 <- "response"
+    c2 <- "stimulus"
 
     warning(paste0("Maximum amplitude of the stimulus and response are identical.",
                 " Check the data and also confirm which channel is the response",
