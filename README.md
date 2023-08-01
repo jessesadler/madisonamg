@@ -4,7 +4,6 @@
 # madisonamg
 
 <!-- badges: start -->
-
 <!-- badges: end -->
 
 The goal of `madisonamg` is to provide a simplified pathway for loading
@@ -71,20 +70,20 @@ trace_tbl <- waveMC_to_tbl(wav, freq = 10000)
 #> Loading required package: tuneR
 
 trace_tbl
-#> # A tibble: 192,804 x 4
-#>    sample     secs stimulus response
-#>     <int>    <dbl>    <int>    <int>
-#>  1      1 0.0001       -256      128
-#>  2      2 0.0002       -256      128
-#>  3      3 0.000300     -320      128
-#>  4      4 0.0004       -384      128
-#>  5      5 0.0005       -320      128
-#>  6      6 0.000600     -320      128
-#>  7      7 0.0007       -256      128
-#>  8      8 0.0008       -192      128
-#>  9      9 0.0009       -192      128
-#> 10     10 0.001         -64      128
-#> # … with 192,794 more rows
+#> # A tibble: 192,804 × 4
+#>    sample   secs stimulus response
+#>     <int>  <dbl>    <int>    <int>
+#>  1      1 0.0001     -256      128
+#>  2      2 0.0002     -256      128
+#>  3      3 0.0003     -320      128
+#>  4      4 0.0004     -384      128
+#>  5      5 0.0005     -320      128
+#>  6      6 0.0006     -320      128
+#>  7      7 0.0007     -256      128
+#>  8      8 0.0008     -192      128
+#>  9      9 0.0009     -192      128
+#> 10     10 0.001       -64      128
+#> # ℹ 192,794 more rows
 ```
 
 Most functions from `madisonamg` expect a trace tibble as an input. A
@@ -158,7 +157,7 @@ provide a minimum amplitude difference between samples.
 
 ``` r
 find_stimuli(trace_tbl)
-#> # A tibble: 10 x 8
+#> # A tibble: 10 × 8
 #>    sample  secs stimulus response amp_diff sample_diff sec_diff    hz
 #>     <int> <dbl>    <int>    <int>    <int>       <int>    <dbl> <dbl>
 #>  1  35331  3.53    32576      128    32576          NA    NA       NA
@@ -346,7 +345,7 @@ as the baseline, but you can also provide your own through the
 
 ``` r
 create_report(trace_tbl, peaks3)
-#> # A tibble: 10 x 6
+#> # A tibble: 10 × 6
 #>    pot_no peak_amp amp_decr_pct   area area_decr_pct delay_mS
 #>     <int>    <int>        <dbl>  <dbl>         <dbl>    <dbl>
 #>  1      1     3584         0    325952         0          5.9
